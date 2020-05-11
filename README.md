@@ -7,7 +7,7 @@ Visor de Imágenes en C# para Windows 10
 
 ## Requisito de compilación 🛠️
 
-* Framwork: [Microsoft.NET 4.5](https://www.microsoft.com/es-cl/download/details.aspx?id=30653)
+* Framework: [Microsoft.NET 4.5](https://www.microsoft.com/es-cl/download/details.aspx?id=30653)
 
 ## Componentes externos 🛠️
 
