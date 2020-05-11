@@ -19,3 +19,8 @@ Visor de Imágenes en C# para Windows 10
 [Github](https://github.com/XamlAnimatedGif/WpfAnimatedGif)
 [Nuget](https://www.nuget.org/packages/WpfAnimatedGif)
 
+![Vision MainWindow](https://raw.githubusercontent.com/LeodevCL/Vision/master/Vision/example01.png)
+
+
+
+
