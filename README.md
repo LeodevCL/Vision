@@ -12,11 +12,15 @@ Visor de Imágenes en C# para Windows 10
 ## Componentes externos 🛠️
 
 * FontAwesome.WPF - Para manejo de glyphs y símbolos
+
 [GitHub](https://github.com/charri/Font-Awesome-WPF)
+
 [Nuget](https://www.nuget.org/packages/FontAwesome.WPF/)
 
 * WpfAnimatedGif - Para manejo de animaciones GIF
+
 [Github](https://github.com/XamlAnimatedGif/WpfAnimatedGif)
+
 [Nuget](https://www.nuget.org/packages/WpfAnimatedGif)
 
 ![Vision MainWindow](https://raw.githubusercontent.com/LeodevCL/Vision/master/Vision/example01.png)
