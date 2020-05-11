@@ -1,0 +1,293 @@
+﻿<Window x:Class="Vision.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Vision"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:b="clr-namespace:Vision.Behaviors"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        Title="Vision" Height="720" Width="1280" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" AllowsTransparency="True" WindowStyle="None" KeyDown="OnKeyDown" Icon="icon.ico" WindowState="Maximized">
+
+    <Grid DataContext="{StaticResource MainVM}" x:Name="grid_main">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <LinearGradientBrush.RelativeTransform>
+                    <TransformGroup>
+                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                        <RotateTransform CenterY="0.5" CenterX="0.5" Angle="90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </LinearGradientBrush.RelativeTransform>
+                <GradientStop Color="#FF87593F" Offset="0"/>
+                <GradientStop Color="#FF385574" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        
+        <Grid Visibility="{Binding PresentationRunning, Converter={StaticResource BoolToVisibility}}" Background="#7F000000" Grid.RowSpan="2">
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Setter Property="Opacity" Value="0"/>
+                    <Style.Triggers>
+                        <Trigger Property="Visibility" Value="Visible">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.0" To="1.0" Duration="0:0:0.3"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+        </Grid>
+
+        <Rectangle Visibility="{Binding LogoVision, Converter={StaticResource BoolToVisibility}}" Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center" StrokeThickness="0" Opacity="0.5">
+            <Rectangle.Fill>
+                <ImageBrush Stretch="UniformToFill" ImageSource="icon.ico"/>
+            </Rectangle.Fill>
+            <Rectangle.Triggers>
+                <EventTrigger RoutedEvent="Rectangle.Loaded">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard TargetProperty="Opacity" RepeatBehavior="Forever">
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.25" To="0.75" Duration="0:0:6" AutoReverse="True" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Rectangle.Triggers>
+        </Rectangle>
+        <local:ZoomBorder x:Name="border" Margin="10,10,10,30" ClipToBounds="True" RenderTransformOrigin=".5,.5">
+            <local:ZoomBorder.RenderTransform>
+                <RotateTransform Angle="0" />
+            </local:ZoomBorder.RenderTransform>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Loaded">
+                    <i:InvokeCommandAction Command="{Binding LoadBorderCommand}" CommandParameter="{Binding ElementName=border}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="SourceUpdated">
+                    <i:InvokeCommandAction Command="{Binding LoadBorderCommand}" CommandParameter="{Binding ElementName=border}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="DataContextChanged">
+                    <i:InvokeCommandAction Command="{Binding LoadBorderCommand}" CommandParameter="{Binding ElementName=border}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <Image gif:ImageBehavior.AnimatedSource="{Binding CurrentPicture.Path}" />
+        </local:ZoomBorder>
+
+        <Rectangle HorizontalAlignment="Left" Width="5" Margin="0,30,0,0" Fill="#02FFFFFF">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <i:InvokeCommandAction Command="{Binding MoverAnteriorCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Rectangle>
+
+        <Rectangle HorizontalAlignment="Right" Width="5" Margin="0,30,0,0" Fill="#02FFFFFF">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <i:InvokeCommandAction Command="{Binding MoverSiguienteCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Rectangle>
+
+        <Button x:Name="bt_close" Style="{DynamicResource IconButton}" Width="25" Height="28" Margin="0" ToolTip="Cerrar (ESC)" Cursor="Hand" Click="OnClose" HorizontalAlignment="Right" VerticalAlignment="Top" Padding="1,12,8,1" >
+            <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_close}" Icon="Times" Spin="False"/>
+        </Button>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,29,0">
+            <TextBlock Text="{Binding Transform.Angle, Converter={StaticResource RealToStdAngle}, TargetNullValue=0, FallbackValue=0}" Foreground="#FFE1E1E1"/>
+            <TextBlock Text="°" Foreground="#FFE1E1E1" Margin="0,0,2,0"/>
+            <fa:ImageAwesome Foreground="#FFE1E1E1" Icon="CircleOutlineNotch" Spin="False" Width="16" Height="16" RenderTransformOrigin="0.5,0.5" Margin="0,0,20,7" VerticalAlignment="Center">
+                <fa:ImageAwesome.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="{Binding Transform.Angle}"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </fa:ImageAwesome.RenderTransform>
+            </fa:ImageAwesome>
+            <Button x:Name="bt_angle" Style="{DynamicResource IconButton}" Width="18" Height="18" Margin="0,0,12,5" ToolTip="Abrir con otro programa" Cursor="Hand" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="{Binding Transform.Angle}"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_angle}" Icon="ArrowCircleRight" Spin="False"/>
+            </Button>
+            <Button Command="{Binding ShowSettingsCommand}" x:Name="bt_conf" Style="{DynamicResource IconButton}" Width="20" Height="20" Margin="2,0,2,6" ToolTip="Configuración" Cursor="Hand">
+                <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_conf}" Icon="Cog" Spin="False"/>
+            </Button>
+            <Button Command="{Binding ListProgramsCommand}" x:Name="bt_list" Style="{DynamicResource IconButton}" Width="20" Height="20" Margin="2,0,2,6" ToolTip="Abrir con otro programa" Cursor="Hand">
+                <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_list}" Icon="CaretSquareOutlineUp" Spin="False"/>
+            </Button>
+            <Button x:Name="bt_mini" Style="{DynamicResource IconButton}" Width="18" Height="18" Margin="2,0,0,6"  ToolTip="Minimizar" Cursor="Hand" Click="OnMinimize">
+                <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_mini}" Icon="AngleDoubleDown" Spin="False"/>
+            </Button>
+        </StackPanel>
+        <StackPanel Visibility="{Binding CtrlVision, Converter={StaticResource BoolToVisibility}}" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
+            <Button Style="{StaticResource IconButton}" x:Name="bt_blur" Command="{Binding ApplyBlurCommand}" Cursor="Hand" ToolTip="Desenfocar imagen" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
+                <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_blur}" Icon="Bullseye" Spin="False" />
+            </Button>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="{Binding CurrentPicture.Nombre, FallbackValue='---'}" ToolTip="Click para abrir el archivo en el explorador" Foreground="#FFCCCCCC" Cursor="Hand">
+                    <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                        <i:InvokeCommandAction Command="{Binding OpenAndSelectCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                </TextBlock>
+                <TextBlock Text="{Binding CurrentPicture, Converter={StaticResource ImageToResolution}, FallbackValue='---', TargetNullValue='---'}" Foreground="#FFCCCCCC" Margin="0,-3,0,0"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Grid Visibility="{Binding CommandBarVision, Converter={StaticResource BoolToVisibility}}" VerticalAlignment="Bottom" Margin="0" Opacity="0.995">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{StaticResource IconButton}" x:Name="bt_open" Command="{Binding OpenFileCommand}" Cursor="Hand" ToolTip="Abrir" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
+                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_open}" Icon="Eject" Spin="False" />
+                </Button>
+                <Button Style="{StaticResource IconButton}" x:Name="bt_print" Command="{Binding PrintFileCommand}" Cursor="Hand" ToolTip="Imprimir imagen" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
+                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_print}" Icon="Print" Spin="False" />
+                </Button>
+                <Button Style="{StaticResource IconButton}" x:Name="bt_save" Command="{Binding SaveAsCommand}" Cursor="Hand" ToolTip="Guardar como" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
+                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_save}" Icon="FloppyOutline" Spin="False" />
+                </Button>
+                <Button Style="{StaticResource IconButton}" x:Name="bt_info" Command="{Binding ShowInfoCommand}" Cursor="Hand" ToolTip="Información del archivo" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0,10,0">
+                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_info}" Icon="InfoCircle" Spin="False" />
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center">
+                <Button Style="{StaticResource IconButton}" x:Name="bt_prim" Command="{Binding MoverPrimeraCommand}" Cursor="Hand" ToolTip="Ver la primera imagen" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,5,0">
+                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_prim}" Icon="StepBackward" Spin="False" />
+                </Button>
+                <Button Style="{StaticResource IconButton}" x:Name="bt_prev" Command="{Binding MoverAnteriorCommand}" Cursor="Hand" ToolTip="Ver la imagen anterior" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
+                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_prev}" Icon="Backward" Spin="False" />
+                </Button>
+                <Button Style="{StaticResource IconButton}" x:Name="bt_pres" Command="{Binding PresentacionCommand}" Cursor="Hand" ToolTip="Ver como presentacion" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
+                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_pres}" Icon="Tv" Spin="False" />
+                </Button>
+                <Button Style="{StaticResource IconButton}" x:Name="bt_sigu" Command="{Binding MoverSiguienteCommand}" Cursor="Hand" ToolTip="Ver la siguiente imagen" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
+                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_sigu}" Icon="Forward" Spin="False" />
+                </Button>
+                <Button Style="{StaticResource IconButton}" x:Name="bt_ulti" Command="{Binding MoverUltimaCommand}" Cursor="Hand" ToolTip="Ver la última imagen" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0,10,0">
+                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_ulti}" Icon="StepForward" Spin="False" />
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource IconButton}" x:Name="bt_zoou" Command="{Binding ZoomOutCommand}" Cursor="Hand" ToolTip="Alejar" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,5,0">
+                        <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_zoou}" Icon="SearchMinus" Spin="False" />
+                    </Button>
+                    <Button Style="{StaticResource IconButton}" x:Name="bt_zooi" Command="{Binding ZoomInCommand}" Cursor="Hand" ToolTip="Acercar" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
+                        <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_zooi}" Icon="SearchPlus" Spin="False" />
+                    </Button>
+                    <Button Style="{StaticResource IconButton}" x:Name="bt_rotl" Command="{Binding RotateLeftCommand}" Cursor="Hand" ToolTip="Rotar a la izquierda" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
+                        <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_rotl}" Icon="RotateLeft" Spin="False" />
+                    </Button>
+                    <Button Style="{StaticResource IconButton}" x:Name="bt_rotr" Command="{Binding RotateRightCommand}" Cursor="Hand" ToolTip="Rotar a la derecha" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
+                        <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_rotr}" Icon="RotateRight" Spin="False" />
+                    </Button>
+                </StackPanel>
+
+                <!--<StackPanel Orientation="Horizontal" Margin="25,0,0,0" >
+                    <Button Style="{StaticResource IconButton}" x:Name="bt_stop" Command="{Binding ZoomOutCommand}" Cursor="Hand" ToolTip="Alejar" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,5,0">
+                        <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_zoou}" Icon="Pause" Spin="False" />
+                    </Button>
+                    <Button Style="{StaticResource IconButton}" x:Name="bt_pause" Command="{Binding ZoomInCommand}" Cursor="Hand" ToolTip="Acercar" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
+                        <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_zooi}" Icon="Play" Spin="False" />
+                    </Button>
+                </StackPanel>-->
+            </StackPanel>
+
+        </Grid>
+
+        <!--<TextBlock Visibility="{Binding PresentacionCommand, Converter={StaticResource BoolToVisibility}}" Text="Pulse ESC para salir del modo presentación" Foreground="#BFFFFFFF" FontSize="10" FontFamily="Segoe UI Light" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>-->
+
+
+        <!-- MINIATURAS -->
+        <ListBox VirtualizingPanel.VirtualizationMode="Recycling" Opacity="{Binding PresentationRunning, Converter={StaticResource BoolToListOpacity}}" ItemsSource="{Binding Pictures, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPicture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="{x:Null}" HorizontalAlignment="Center" ScrollViewer.CanContentScroll="True" BorderBrush="{x:Null}" BorderThickness="0" HorizontalContentAlignment="Center">
+            <i:Interaction.Behaviors>
+                <b:ScrollIntoViewForListBox/>
+            </i:Interaction.Behaviors>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border x:Name="PART_border">
+                        <Image Width="35" Height="35" Margin="5,0" Cursor="Hand">
+                            <Image.Source>
+                                <BitmapImage DecodePixelHeight="25" UriSource="{Binding Path, Mode=OneWay}"/>
+                            </Image.Source>
+                        </Image>
+                    </Border>
+                    <!--<DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                            -->
+                    <!--<Setter Property="BorderBrush" TargetName="PART_border" Value="Gray"/>-->
+                    <!--<Setter Property="Background" TargetName="PART_border" Value="#7F808080"/>-->
+                    <!--
+                        </DataTrigger>
+                    </DataTemplate.Triggers>-->
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <ProgressBar Visibility="{Binding BarVision, Converter={StaticResource BoolToVisibility}}" Height="3" Margin="0,3,0,0" Grid.Row="1" VerticalAlignment="Top" HorizontalContentAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#7FFFFFFF" IsIndeterminate="True"/>
+
+        <!--<ItemsControl ItemsSource="{Binding Pictures, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="#7FFF0000">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Hidden"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    -->
+        <!--<Grid Height="20" Width="20" Background="#FF30B632"/>-->
+        <!--
+                    <Border x:Name="PART_border">
+                        <Image Width="35" Height="35" Margin="5,0" Cursor="Hand">
+                            <Image.Source>
+                                <BitmapImage DecodePixelHeight="35" UriSource="{Binding Path, Mode=OneWay}"/>
+                            </Image.Source>
+                        </Image>
+                    </Border>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1}, Path=IsSelected}" Value="True">
+                            <Setter Property="Background" TargetName="PART_border" Value="#FF4780B3"/>
+                        </DataTrigger> 
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>-->
+
+        <TextBlock Visibility="{Binding PresentationRunning, Converter={StaticResource BoolToVisibility}}" HorizontalAlignment="Center" Margin="0,0,0,55" TextWrapping="Wrap" Text="Pulse ESC para salir de la presentación" VerticalAlignment="Bottom" Foreground="#4CFFFFFF" Grid.RowSpan="3" FontSize="10"/>
+
+    </Grid>
+</Window>

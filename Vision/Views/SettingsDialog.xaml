@@ -1,0 +1,33 @@
+﻿<Window x:Class="Vision.Views.SettingsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Ajustes" Height="250" Width="500" Icon="/Vision;component/icon.ico" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <LinearGradientBrush.RelativeTransform>
+                    <TransformGroup>
+                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                        <RotateTransform CenterY="0.5" CenterX="0.5" Angle="90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </LinearGradientBrush.RelativeTransform>
+                <GradientStop Color="#FF87593F" Offset="0"/>
+                <GradientStop Color="#FF385574" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <StackPanel Orientation="Vertical" Margin="10" VerticalAlignment="Top">
+            <CheckBox x:Name="check_instance" Content="INSTANCIA ÚNICA" FontFamily="Segoe UI Black" Foreground="White"/>
+            <TextBlock Text="Al activar esta opción VISION solo se ejecutará 1 vez, sin importar si abre varios archivos por separado o ejecuta el programa desde el ícono. Desmárquela para permitir que VISION se ejecute en múltiples instancias." TextWrapping="Wrap" Foreground="White"/>
+
+            <CheckBox x:Name="check_hidden" Content="IGNORAR ARCHIVOS OCULTOS" FontFamily="Segoe UI Black" Foreground="White" Margin="0,10,0,0"/>
+            <TextBlock Text="Al activar esta opción VISION ignorará los archivos ocultos durante la carga. Desmárquela para que VISION incluya archivos ocultos nuevamente." TextWrapping="Wrap" Foreground="White"/>
+
+        </StackPanel>
+        <Button Click="OnClick" Content="Aceptar" HorizontalAlignment="Center" Margin="0,0,0,10" VerticalAlignment="Bottom" Width="75" Background="#BFFFFFFF"/>
+
+
+    </Grid>
+</Window>

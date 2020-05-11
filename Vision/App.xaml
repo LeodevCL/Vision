@@ -1,0 +1,27 @@
+﻿<Application x:Class="Vision.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Vision.ViewModels"
+             xmlns:local="clr-namespace:Vision"
+             StartupUri="MainWindow.xaml"
+             Startup="Application_Startup"
+             DispatcherUnhandledException="OnUnhandledException">
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- Theme -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Core\Themes\Button.xaml"/>
+                <!--<ResourceDictionary Source="Core\Themes\LeftScrollViewer.xaml"/>
+                <ResourceDictionary Source="Core\Themes\ScrollBarLineButton.xaml"/>-->
+            </ResourceDictionary.MergedDictionaries>
+            <!-- ViewModel -->
+            <vm:MainViewModel               x:Key="MainVM" /> 
+            <!-- Converter -->
+            <BooleanToVisibilityConverter   x:Key="BoolToVisibility"/>
+            <local:RealAngleToStandardAngle x:Key="RealToStdAngle"/>
+            <local:ImageToResolution        x:Key="ImageToResolution"/>
+            <local:BooleanToListOpacity     x:Key="BoolToListOpacity"/>
+            <!--<local:ImageConverter           x:Key="ImageConverter"/>-->
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
