@@ -551,7 +551,7 @@ namespace Vision.ViewModels
             dialog.DefaultExt = CurrentPicture.Extension;
             dialog.FileName = CurrentPicture.Info.Name;
             dialog.Title = "Seleccione ruta de guardado";
-            dialog.Filter = "Imagen PNG |*.png|Imagen JPG |*.jpg|Imagen JPEG |*.jpeg|Imagen TIFF |*.tiff|Imagen GIF |*.gif|Imagen BMP |*.bmp|Imagen EMF |*.emf|Imagen EXIF |*.exif";
+            dialog.Filter = "Portable Network Graphics PNG |*.png|Joint Photographic Group JPG |*.jpg|Joint Photographic Experts Group JPEG |*.jpeg|Tagged Image File Format TIFF |*.tiff|Graphics Interchange Format GIF |*.gif|Bits Maps Protocole BMP |*.bmp|Enhanced Windows Metafile Picture EMF |*.emf|Exchangeable Image File Format  EXIF |*.exif";
             UseDefaultExtAsFilterIndex(dialog);
             if (dialog.ShowDialog() == true)
             {
