@@ -49,7 +49,7 @@ namespace Vision
                     }
                     break;
                 case Key.LeftCtrl:
-                    ViewModel.CtrlVision = !ViewModel.CtrlVision;
+                    ViewModel.CtrlLeftVision = !ViewModel.CtrlLeftVision;
                     break;
                 case Key.Left:
                     ViewModel.MoverAnterior();

@@ -54,14 +54,25 @@ namespace Vision.ViewModels
             }
         }
 
-        private bool _ctrlVision = false;
-        public bool CtrlVision
+        private bool _ctrlLeftVision = false;
+        public bool CtrlLeftVision
         {
-            get { return _ctrlVision; }
+            get { return _ctrlLeftVision; }
             set
             {
-                _ctrlVision = value;
-                RaisePropertyChanged("CtrlVision");
+                _ctrlLeftVision = value;
+                RaisePropertyChanged("CtrlLeftVision");
+            }
+        }
+
+        private bool _ctrlRightVision = true;
+        public bool CtrlRightVision
+        {
+            get { return _ctrlRightVision; }
+            set
+            {
+                _ctrlRightVision = value;
+                RaisePropertyChanged("CtrlRightVision");
             }
         }
 
@@ -442,7 +453,7 @@ namespace Vision.ViewModels
             {
                 if (File.Exists(filename))
                 {
-                    CtrlVision = true;
+                    CtrlLeftVision = true;
                     Pictures.FirstImage = new Picture(new FileInfo(filename), -1);
                     CargarArchivosCompatibles();
                 }
@@ -683,6 +694,8 @@ namespace Vision.ViewModels
         private void IniciarPresentacion()
         {
             PresentationRunning = true;
+            CtrlLeftVision = false;
+            CtrlRightVision = false;
             SlideTimer = new DispatcherTimer();
             SlideTimer.Interval = TimeSpan.FromSeconds(3);
             SlideTimer.Tick += SlideTimer_Tick;
@@ -703,6 +716,8 @@ namespace Vision.ViewModels
 
         public void DetenerPresentacion()
         {
+            CtrlLeftVision = true;
+            CtrlRightVision = true;
             SlideTimer.Stop();
             SlideTimer = null;
             PresentationRunning = false;
