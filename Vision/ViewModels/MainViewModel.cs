@@ -98,6 +98,18 @@ namespace Vision.ViewModels
             }
         }
 
+        private bool _imageOnlyVision = false;
+        public bool ImageOnlyVision
+        {
+            get { return _imageOnlyVision; }
+            set
+            {
+                _imageOnlyVision = value;
+                RaisePropertyChanged("ImageOnlyVision");
+            }
+        }
+
+
         private bool _presentationRunning = false;
         public bool PresentationRunning
         {
@@ -365,7 +377,25 @@ namespace Vision.ViewModels
         #region Condicionantes de ICommands
         private bool CanExecute
         {
-            get {  return Pictures.Count > 0; }
+            get 
+            {  
+                //return Pictures.Count > 0; 
+                if (ImageOnlyVision)
+                {
+                    if (Pictures.FirstImage != null)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (Pictures.Count > 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         private bool CanMoveFirst
@@ -392,15 +422,19 @@ namespace Vision.ViewModels
         {
             get 
             {
-                if (Pictures.Count > 0 && Transform != null)
-                {                    
-                   //if (Transform.Angle == 0 || Transform.Angle == 90 || Transform.Angle == 180 || Transform.Angle == 270 || Transform.Angle == 360) // esto hace que falle 2 de las 4 rotaciones
-                   //if(Transform.Angle % 90 == 0) // esto hace que falle 2 de las 4 rotaciones
-                   //{
-                       //return true;
-                   //}
-
-                    return true;
+                if (ImageOnlyVision)
+                {
+                    if (Pictures.FirstImage != null && Transform != null)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (Pictures.Count > 0 && Transform != null)
+                    {
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -469,7 +503,15 @@ namespace Vision.ViewModels
         {
             await Task.Run(() => LimpiarColecciones());
             await Task.Run(() => CargarPrimeraImagen());
-            await Task.Run(() => CargarImagenesCompatibles()); 
+            if (SettingsManager.Load("OnlySelected") != 1)
+            {
+                await Task.Run(() => CargarImagenesCompatibles());
+                ImageOnlyVision = false;
+            }
+            else
+            {
+                ImageOnlyVision = true;
+            }
             //ShowDebugInfo();
         }
 

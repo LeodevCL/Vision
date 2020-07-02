@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace Vision.Views
 {
@@ -24,6 +12,7 @@ namespace Vision.Views
             InitializeComponent();
             check_instance.IsChecked = SettingsManager.Load("InstanceType") == 1 ? true : false;
             check_hidden.IsChecked = SettingsManager.Load("IgnoreHidden") == 1 ? true : false;
+            check_selection.IsChecked = SettingsManager.Load("OnlySelected") == 1 ? true : false;
         }
 
         private void OnClick(object sender, RoutedEventArgs e)
@@ -33,6 +22,9 @@ namespace Vision.Views
 
             int value2 = check_hidden.IsChecked.Value ? 1 : 0;
             SettingsManager.Save("IgnoreHidden", value2);
+
+            int value3 = check_selection.IsChecked.Value ? 1 : 0;
+            SettingsManager.Save("OnlySelected", value3);
 
             DialogResult = true;
         }

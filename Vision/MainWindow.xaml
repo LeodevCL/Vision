@@ -218,6 +218,7 @@
                 </StackPanel>-->
             </StackPanel>
 
+            
         </Grid>
 
         <!--<TextBlock Visibility="{Binding PresentacionCommand, Converter={StaticResource BoolToVisibility}}" Text="Pulse ESC para salir del modo presentación" Foreground="#BFFFFFFF" FontSize="10" FontFamily="Segoe UI Light" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>-->
@@ -260,35 +261,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <ProgressBar Visibility="{Binding BarVision, Converter={StaticResource BoolToVisibility}}" Height="3" Margin="0,3,0,0" Grid.Row="1" VerticalAlignment="Top" HorizontalContentAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#7FFFFFFF" IsIndeterminate="True"/>
-
-        <!--<ItemsControl ItemsSource="{Binding Pictures, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="#7FFF0000">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Hidden"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    -->
-        <!--<Grid Height="20" Width="20" Background="#FF30B632"/>-->
-        <!--
-                    <Border x:Name="PART_border">
-                        <Image Width="35" Height="35" Margin="5,0" Cursor="Hand">
-                            <Image.Source>
-                                <BitmapImage DecodePixelHeight="35" UriSource="{Binding Path, Mode=OneWay}"/>
-                            </Image.Source>
-                        </Image>
-                    </Border>
-                    <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1}, Path=IsSelected}" Value="True">
-                            <Setter Property="Background" TargetName="PART_border" Value="#FF4780B3"/>
-                        </DataTrigger> 
-                    </DataTemplate.Triggers>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>-->
-
         <TextBlock Visibility="{Binding PresentationRunning, Converter={StaticResource BoolToVisibility}}" HorizontalAlignment="Center" Margin="0,0,0,55" TextWrapping="Wrap" Text="Pulse ESC para salir de la presentación" VerticalAlignment="Bottom" Foreground="#4CFFFFFF" Grid.RowSpan="3" FontSize="10"/>
-
+        <TextBlock Visibility="{Binding ImageOnlyVision, Converter={StaticResource BoolToVisibility}}" HorizontalAlignment="Center" Margin="0,0,0,10" TextWrapping="Wrap" Text="VISION está en modo de imagen individual, cambie los ajustes para mostrar todas las imágenes de la carpeta" VerticalAlignment="Bottom" Foreground="#4CFFFFFF" Grid.RowSpan="3" FontSize="10"/>
     </Grid>
 </Window>
