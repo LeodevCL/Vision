@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Vision.Views.SettingsDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Ajustes" Height="300" Width="500" Icon="/Vision;component/icon.ico" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Ajustes" Height="380" Width="500" Icon="/Vision;component/icon.ico" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
@@ -18,18 +18,23 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <StackPanel Orientation="Vertical" Margin="10" VerticalAlignment="Top">
-            <CheckBox x:Name="check_instance" Content="INSTANCIA ÚNICA" FontFamily="Segoe UI Black" Foreground="White"/>
-            <TextBlock Text="Al activar esta opción VISION solo se ejecutará 1 vez, sin importar si abre varios archivos por separado o ejecuta el programa desde el ícono. Desmárquela para permitir que VISION se ejecute en múltiples instancias." TextWrapping="Wrap" Foreground="White"/>
+        <StackPanel Orientation="Vertical" Margin="10,95,10,10" VerticalAlignment="Top">
+            <CheckBox x:Name="check_instance" Content="INSTANCIA ÚNICA" Foreground="White" Background="White" FontWeight="Bold"/>
+            <TextBlock Text="Al activar esta opción VISION solo se ejecutará 1 vez, sin importar si abre varios archivos por separado o ejecuta el programa desde el ícono. Desmárquela para permitir que VISION se ejecute en múltiples instancias." TextWrapping="Wrap" Foreground="#FFEFEFEF"/>
 
-            <CheckBox x:Name="check_hidden" Content="IGNORAR ARCHIVOS OCULTOS" FontFamily="Segoe UI Black" Foreground="White" Margin="0,10,0,0"/>
-            <TextBlock Text="Al activar esta opción VISION ignorará los archivos ocultos durante la carga. Desmárquela para que VISION incluya archivos ocultos nuevamente." TextWrapping="Wrap" Foreground="White"/>
+            <CheckBox x:Name="check_hidden" Content="IGNORAR ARCHIVOS OCULTOS" Foreground="White" Margin="0,20,0,0" FontWeight="Bold"/>
+            <TextBlock Text="Al activar esta opción VISION ignorará los archivos ocultos durante la carga. Desmárquela para que VISION incluya archivos ocultos nuevamente." TextWrapping="Wrap" Foreground="#FFEFEFEF"/>
 
-            <CheckBox x:Name="check_selection" Content="ABRIR SOLO LA IMAGEN SELECCIONADA" FontFamily="Segoe UI Black" Foreground="White" Margin="0,10,0,0"/>
-            <TextBlock Text="Al activar esta opción VISION se abrirá mostrando únicamente la imagen clickeada. Desmárquela para abrir todas las imagenes en la carpeta." TextWrapping="Wrap" Foreground="White"/>
+            <CheckBox x:Name="check_selection" Content="ABRIR SOLO LA IMAGEN SELECCIONADA" Foreground="White" Margin="0,20,0,0" FontWeight="Bold"/>
+            <TextBlock Text="Al activar esta opción VISION se abrirá mostrando únicamente la imagen clickeada. Desmárquela para abrir todas las imagenes en la carpeta." TextWrapping="Wrap" Foreground="#FFEFEFEF"/>
 
         </StackPanel>
         <Button Click="OnClick" Content="Aceptar" HorizontalAlignment="Center" Margin="0,0,0,10" VerticalAlignment="Bottom" Width="75" Background="#BFFFFFFF"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="VISION" VerticalAlignment="Top" Foreground="White" FontFamily="Arial Black"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,27,0,0" TextWrapping="Wrap" Text="Versión 1.07.20a" VerticalAlignment="Top" Foreground="#FFEFEFEF" FontSize="10"/>
+        <TextBlock HorizontalAlignment="Right" Margin="0,10,9.6,0" TextWrapping="Wrap" Text="LEODEV" VerticalAlignment="Top" Foreground="White" FontFamily="Arial Black"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" Text="github.com/LeodevCL/Vision" VerticalAlignment="Top" Foreground="White" FontSize="10"/>
+        <Rectangle Height="2" Margin="10,73,10,0" VerticalAlignment="Top" Fill="#4CFFFFFF" StrokeThickness="0"/>
 
 
     </Grid>
