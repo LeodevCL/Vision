@@ -15,7 +15,9 @@ Visor de Imágenes en C# para Windows 10
 
 * WpfAnimatedGif - Para manejo de animaciones GIF. [Github](https://github.com/XamlAnimatedGif/WpfAnimatedGif) | [Nuget](https://www.nuget.org/packages/WpfAnimatedGif)
 
-![Vision MainWindow](https://raw.githubusercontent.com/LeodevCL/Vision/master/Vision/example01.png)
+* MetadataExtractor - Para manejo de metadatos EXIF y otros. [Github](https://github.com/drewnoakes/metadata-extractor-dotnet) | [Nuget](https://www.nuget.org/packages/MetadataExtractor/)
+
+![Vision MainWindow](https://raw.githubusercontent.com/LeodevCL/Vision/master/Vision/example02.png)
 
 
 
