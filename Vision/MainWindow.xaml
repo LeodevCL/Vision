@@ -84,7 +84,7 @@
         </local:ZoomBorder>
 
         <!-- Visibility="{Binding ExifPanelVision, Converter={StaticResource BoolToVisibility}}" -->
-        <Grid Visibility="{Binding ExifPanelVision, Converter={StaticResource BoolToVisibility}}" Background="#7F094462" HorizontalAlignment="Left" MinWidth="250" Margin="10,75,0,25">
+        <Grid Visibility="{Binding ExifPanelVision, Converter={StaticResource BoolToVisibility}}" Background="#7F094462" HorizontalAlignment="Left" MinWidth="250" Margin="10,75,10,25">
             <ListBox ItemsSource="{Binding ExifTags, UpdateSourceTrigger=PropertyChanged}" Margin="0" Background="#19FFFFFF" BorderBrush="{x:Null}" Foreground="#BFFFFFFF" BorderThickness="0"/>
         </Grid>
 

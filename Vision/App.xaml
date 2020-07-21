@@ -12,8 +12,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Core\Themes\Button.xaml"/>
                 <ResourceDictionary Source="Core\Themes\ExifTagScrollTheme.xaml"/>
-                <!--<ResourceDictionary Source="Core\Themes\LeftScrollViewer.xaml"/>
-                <ResourceDictionary Source="Core\Themes\ScrollBarLineButton.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
             <!-- ViewModel -->
             <vm:MainViewModel               x:Key="MainVM" /> 
@@ -22,7 +20,6 @@
             <local:RealAngleToStandardAngle x:Key="RealToStdAngle"/>
             <local:ImageToResolution        x:Key="ImageToResolution"/>
             <local:BooleanToListOpacity     x:Key="BoolToListOpacity"/>
-            <!--<local:ImageConverter           x:Key="ImageConverter"/>-->
         </ResourceDictionary>
     </Application.Resources>
 </Application>
