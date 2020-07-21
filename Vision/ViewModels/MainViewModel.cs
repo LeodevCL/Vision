@@ -58,6 +58,16 @@ namespace Vision.ViewModels
             }
         }
 
+        private ObservableCollection<string> _exifTags = new ObservableCollection<string>();
+        public ObservableCollection<string> ExifTags
+        {
+            get { return _exifTags; }
+            set
+            {
+                _exifTags = value;
+                RaisePropertyChanged("ExifTags");
+            }
+        } 
 
         public bool LogoVision
         {
@@ -228,15 +238,14 @@ namespace Vision.ViewModels
             }
         }
 
-
-        private ICommand _showInfoCommand;
-        public ICommand ShowInfoCommand
+        private ICommand _openFileInFolderCommand;
+        public ICommand OpenFileInFolderCommand
         {
             get
             {
-                if (_showInfoCommand == null)
-                    _showInfoCommand = new RelayCommand(new Action(ShowInfo), () => CanExecute);
-                return _showInfoCommand;
+                if (_openFileInFolderCommand == null)
+                    _openFileInFolderCommand = new RelayCommand(new Action(OpenFileInFolder), () => CanExecute);
+                return _openFileInFolderCommand;
             }
         }
 
@@ -361,7 +370,6 @@ namespace Vision.ViewModels
             }
         }
 
-        //ShowConfigCommand
         private ICommand _showSettingsCommand;
         public ICommand ShowSettingsCommand
         {
@@ -706,16 +714,18 @@ namespace Vision.ViewModels
             bmpNewImage.Save(to_file, format);
         }
 
-        #endregion
-
-        #region ShowInfo
-
-        private void ShowInfo()
+        public void SwitchExifMetadata()
         {
-            GetInfoDialog dialog = new GetInfoDialog(CurrentPicture);
-            dialog.ShowDialog();
+            ExifPanelVision = !ExifPanelVision;
         }
 
+        #endregion
+
+        #region OpenFileInFolder
+        private void OpenFileInFolder()
+        {
+            Magic.OpenAndSelect(CurrentPicture.Path);
+        }
         #endregion
 
         #region Mover
@@ -966,6 +976,7 @@ namespace Vision.ViewModels
         }
         #endregion
 
+        #region NormalizeExifRotation
         private void NormalizeExifRotation(Func<ushort> func)
         {
             if (LoadSuccessfully)
@@ -1018,23 +1029,9 @@ namespace Vision.ViewModels
 
             RaisePropertyChanged("CurrentPicture");
         }
-
-        private ObservableCollection<string> _exifTags = new ObservableCollection<string>();
-        public ObservableCollection<string> ExifTags
-        {
-            get { return _exifTags; }
-            set
-            { 
-                _exifTags = value;
-                RaisePropertyChanged("ExifTags");
-            }
-        }
-
-        public void SwitchExifMetadata()
-        {
-            ExifPanelVision = !ExifPanelVision; 
-        }
-
+        #endregion
+        
+        #region ReadMetadata
         private void ReadMetadata()
         {
             ExifTags.Clear();
@@ -1045,26 +1042,7 @@ namespace Vision.ViewModels
                 ExifTags.Add(directory.Name + " - " + tag.Name + " = " + tag.Description);
 
             RaisePropertyChanged("ExifTags");
-        } 
-
-        private void ReadMetadata2()
-        {
-            ExifTags.Clear();
-            ExifLibrary.ExifFile data = ExifLibrary.ExifFile.Read(CurrentPicture.Path);
-            ExifTags.Add("=== METADATA ===");
-            if (data.Properties.Count > 0)
-            {
-                foreach (ExifLibrary.ExifProperty item in data.Properties.Values)
-                {
-                    ExifTags.Add(item.Name + " : " + item.Value + " > " + item.IFD);
-                }
-            }
-            else
-            {
-                ExifTags.Add("No se encontraron datos");
-            }
-
-            RaisePropertyChanged("ExifTags");
         }
+        #endregion
     }
 }

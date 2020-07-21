@@ -19,7 +19,10 @@
             <BooleanToVisibilityConverter   x:Key="BoolToVisibility"/>
             <local:RealAngleToStandardAngle x:Key="RealToStdAngle"/>
             <local:ImageToResolution        x:Key="ImageToResolution"/>
+            <local:ImageToSize              x:Key="ImageToSize"/>
             <local:BooleanToListOpacity     x:Key="BoolToListOpacity"/>
+            <local:PresentarionBoolToHeightA x:Key="PresentationToHeightA"/>
+            <local:PresentarionBoolToHeightB x:Key="PresentationToHeightB"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

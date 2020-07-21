@@ -103,9 +103,6 @@
     <Compile Include="Core\Magic.cs" />
     <Compile Include="Core\IEnlace.cs" />
     <Compile Include="Core\SettingsManager.cs" />
-    <Compile Include="GetInfoDialog.xaml.cs">
-      <DependentUpon>GetInfoDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Models\Programa.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Models\Picture.cs" />
@@ -127,10 +124,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Core\Themes\ScrollBarLineButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="GetInfoDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

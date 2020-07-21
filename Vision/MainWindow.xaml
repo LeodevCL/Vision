@@ -11,7 +11,8 @@
     <Grid DataContext="{StaticResource MainVM}" x:Name="grid_main">
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="{Binding PresentationRunning, Converter={StaticResource PresentationToHeightA}}" />
+            <RowDefinition Height="{Binding PresentationRunning, Converter={StaticResource PresentationToHeightB}}" />
         </Grid.RowDefinitions>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
@@ -65,7 +66,7 @@
             </Rectangle.Triggers>
         </Rectangle>
         
-        <local:ZoomBorder x:Name="border" Margin="10,10,10,30" ClipToBounds="True" RenderTransformOrigin=".5,.5">
+        <local:ZoomBorder x:Name="border" Margin="10" ClipToBounds="True" RenderTransformOrigin=".5,.5">
             <local:ZoomBorder.RenderTransform>
                 <RotateTransform Angle="0" />
             </local:ZoomBorder.RenderTransform>
@@ -83,7 +84,6 @@
             <Image gif:ImageBehavior.AnimatedSource="{Binding CurrentPicture.Path}" />
         </local:ZoomBorder>
 
-        <!-- Visibility="{Binding ExifPanelVision, Converter={StaticResource BoolToVisibility}}" -->
         <Grid Visibility="{Binding ExifPanelVision, Converter={StaticResource BoolToVisibility}}" Background="#7F094462" HorizontalAlignment="Left" MinWidth="250" Margin="10,75,10,25">
             <ListBox ItemsSource="{Binding ExifTags, UpdateSourceTrigger=PropertyChanged}" Margin="0" Background="#19FFFFFF" BorderBrush="{x:Null}" Foreground="#BFFFFFFF" BorderThickness="0"/>
         </Grid>
@@ -107,6 +107,7 @@
         <Button x:Name="bt_close" Style="{DynamicResource IconButton}" Width="25" Height="28" Margin="0" ToolTip="Cerrar (ESC)" Cursor="Hand" Click="OnClose" HorizontalAlignment="Right" VerticalAlignment="Top" Padding="1,12,8,1" >
             <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_close}" Icon="Times" Spin="False"/>
         </Button>
+        
         <StackPanel Visibility="{Binding CtrlRightVision, Converter={StaticResource BoolToVisibility}}" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,29,0">
             <TextBlock Text="{Binding Transform.Angle, Converter={StaticResource RealToStdAngle}, TargetNullValue=0, FallbackValue=0}" Foreground="#FFE1E1E1"/>
             <TextBlock Text="°" Foreground="#FFE1E1E1" Margin="0,0,2,0"/>
@@ -143,9 +144,7 @@
         </StackPanel>
 
         <StackPanel Visibility="{Binding CtrlLeftVision, Converter={StaticResource BoolToVisibility}}" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
-            <Button Style="{StaticResource IconButton}" x:Name="bt_blur" Command="{Binding ApplyBlurCommand}" Cursor="Hand" ToolTip="Desenfocar imagen" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
-                <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_blur}" Icon="Bullseye" Spin="False" />
-            </Button>
+            <Rectangle Width="3" Height="40" Fill="#7FF0F0F0" Margin="0,0,3,0"/>
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="{Binding CurrentPicture.Nombre, FallbackValue='---'}" ToolTip="Click para abrir el archivo en el explorador" Foreground="#FFCCCCCC" Cursor="Hand">
                     <i:Interaction.Triggers>
@@ -155,10 +154,14 @@
                 </i:Interaction.Triggers>
                 </TextBlock>
                 <TextBlock Text="{Binding CurrentPicture, Converter={StaticResource ImageToResolution}, FallbackValue='---', TargetNullValue='---'}" Foreground="#FFCCCCCC" Margin="0,-3,0,0"/>
+                <TextBlock Text="{Binding CurrentPicture, Converter={StaticResource ImageToSize}, FallbackValue='---', TargetNullValue='---'}" Foreground="#FFCCCCCC" Margin="0,-3,0,0"/>
             </StackPanel>
         </StackPanel>
 
-        <Grid Visibility="{Binding CommandBarVision, Converter={StaticResource BoolToVisibility}}" VerticalAlignment="Bottom" Margin="0" Opacity="0.995">
+        <TextBlock Visibility="{Binding PresentationRunning, Converter={StaticResource BoolToVisibility}}" HorizontalAlignment="Center" Margin="10,0" TextWrapping="Wrap" Text="Pulse ESC para salir de la presentación" VerticalAlignment="Bottom" Foreground="#4CFFFFFF" FontSize="10"/>
+
+        <!-- BARRA DE COMANDOS -->
+        <Grid Visibility="{Binding CommandBarVision, Converter={StaticResource BoolToVisibility}}" VerticalAlignment="Bottom" Margin="0" Opacity="0.995" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="200"/>
@@ -175,8 +178,8 @@
                 <Button Style="{StaticResource IconButton}" x:Name="bt_save" Command="{Binding SaveAsCommand}" Cursor="Hand" ToolTip="Guardar como" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
                     <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_save}" Icon="FloppyOutline" Spin="False" />
                 </Button>
-                <Button Style="{StaticResource IconButton}" x:Name="bt_info" Command="{Binding ShowInfoCommand}" Cursor="Hand" ToolTip="Información del archivo" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0,10,0">
-                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_info}" Icon="InfoCircle" Spin="False" />
+                <Button Style="{StaticResource IconButton}" x:Name="bt_find" Command="{Binding OpenFileInFolderCommand}" Cursor="Hand" ToolTip="Localizar archivo en disco" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0,10,0">
+                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_find}" Icon="FolderOpen" Spin="False" />
                 </Button>
             </StackPanel>
 
@@ -227,11 +230,8 @@
             
         </Grid>
 
-        <!--<TextBlock Visibility="{Binding PresentacionCommand, Converter={StaticResource BoolToVisibility}}" Text="Pulse ESC para salir del modo presentación" Foreground="#BFFFFFFF" FontSize="10" FontFamily="Segoe UI Light" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>-->
-
-
         <!-- MINIATURAS -->
-        <ListBox VirtualizingPanel.VirtualizationMode="Recycling" Opacity="{Binding PresentationRunning, Converter={StaticResource BoolToListOpacity}}" ItemsSource="{Binding Pictures, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPicture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="{x:Null}" HorizontalAlignment="Center" ScrollViewer.CanContentScroll="True" BorderBrush="{x:Null}" BorderThickness="0" HorizontalContentAlignment="Center">
+        <ListBox VirtualizingPanel.VirtualizationMode="Recycling" Opacity="{Binding PresentationRunning, Converter={StaticResource BoolToListOpacity}}" ItemsSource="{Binding Pictures, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPicture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="{x:Null}" HorizontalAlignment="Center" ScrollViewer.CanContentScroll="True" BorderBrush="{x:Null}" BorderThickness="0" HorizontalContentAlignment="Center">
             <i:Interaction.Behaviors>
                 <b:ScrollIntoViewForListBox/>
             </i:Interaction.Behaviors>
@@ -267,7 +267,6 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <ProgressBar Visibility="{Binding BarVision, Converter={StaticResource BoolToVisibility}}" Height="3" Margin="0,3,0,0" Grid.Row="1" VerticalAlignment="Top" HorizontalContentAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#7FFFFFFF" IsIndeterminate="True"/>
-        <TextBlock Visibility="{Binding PresentationRunning, Converter={StaticResource BoolToVisibility}}" HorizontalAlignment="Center" Margin="0,0,0,55" TextWrapping="Wrap" Text="Pulse ESC para salir de la presentación" VerticalAlignment="Bottom" Foreground="#4CFFFFFF" Grid.RowSpan="3" FontSize="10"/>
         <TextBlock Visibility="{Binding ImageOnlyVision, Converter={StaticResource BoolToVisibility}}" HorizontalAlignment="Center" Margin="0,0,0,10" TextWrapping="Wrap" Text="VISION está en modo de imagen individual, cambie los ajustes para mostrar todas las imágenes de la carpeta" VerticalAlignment="Bottom" Foreground="#4CFFFFFF" Grid.RowSpan="3" FontSize="10"/>
     </Grid>
 </Window>
