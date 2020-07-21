@@ -6,13 +6,6 @@ namespace Vision
 {
     public class PictureCollection : ObservableCollection<Picture>
     {
-        //private FileInfo _firstImage;
-        //public FileInfo FirstImage
-        //{
-        //    get { return _firstImage; }
-        //    set { _firstImage = value; }
-        //}
-
         private Picture _firstImage;
         public Picture FirstImage
         {
@@ -53,7 +46,6 @@ namespace Vision
     {
         // Borde - Image - Resolución - Ruta - Directorio - Peso - Indice
 
-        
         private FileInfo _info;
         public FileInfo Info
         {
@@ -162,6 +154,46 @@ namespace Vision
             Indice = indice;
         }
 
+        public System.UInt16 ExifOrientation()
+        {
+            #region Nota sobre metadatos EXIF
+            /**
+            The 8 EXIF orientation values are numbered 1 to 8.
+
+            1 = 0 degrees: the correct orientation, no adjustment is required.
+            2 = 0 degrees, mirrored: image has been flipped back-to-front.
+            3 = 180 degrees: image is upside down.
+            4 = 180 degrees, mirrored: image is upside down and flipped back-to-front.
+            5 = 90 degrees: image is on its side.
+            6 = 90 degrees, mirrored: image is on its side and flipped back-to-front.
+            7 = 270 degrees: image is on its far side.
+            8 = 270 degrees, mirrored: image is on its far side and flipped back-to-front. || RotatedRightAndMirroredVertically
+            */
+            #endregion
+            try
+            {
+                System.Windows.Media.Imaging.BitmapFrame frame = System.Windows.Media.Imaging.BitmapFrame.Create(new System.Uri(Path), System.Windows.Media.Imaging.BitmapCreateOptions.DelayCreation, System.Windows.Media.Imaging.BitmapCacheOption.Default);
+                var bmData = (System.Windows.Media.Imaging.BitmapMetadata)frame.Metadata;
+                if (bmData != null)
+                {
+                    object val = bmData.GetQuery("/app1/ifd/exif:{uint=274}");
+                    if (val != null)
+                    {
+                        System.UInt16 exifrotation = 0;
+                        if (System.UInt16.TryParse(val.ToString(), out exifrotation))
+                        {
+                            return exifrotation;
+                        }
+                    }
+                }
+
+                return 0;
+            }
+            catch(System.Exception)
+            {
+                return 0;
+            }
+        }
       
     }
 }

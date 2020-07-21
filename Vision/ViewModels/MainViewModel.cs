@@ -1,10 +1,13 @@
-﻿using Microsoft.Win32;
+﻿using MetadataExtractor;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -32,6 +35,13 @@ namespace Vision.ViewModels
             }
         }
 
+        private bool _loadSuccessfully = false;
+        public bool LoadSuccessfully
+        {
+            get { return _loadSuccessfully; }
+            set { _loadSuccessfully = value; }
+        }
+
         private Picture _currentPicture;
         public Picture CurrentPicture
         {
@@ -43,8 +53,11 @@ namespace Vision.ViewModels
                 RaisePropertyChanged("CurrentPicture");
                 RaisePropertyChanged("LogoVision");
                 RaisePropertyChanged("CanRotate");
+                NormalizeExifRotation(value.ExifOrientation);
+                ReadMetadata();
             }
         }
+
 
         public bool LogoVision
         {
@@ -109,6 +122,16 @@ namespace Vision.ViewModels
             }
         }
 
+        private bool _exifPanelVision = false;
+        public bool ExifPanelVision
+        {
+            get { return _exifPanelVision; }
+            set
+            {
+                _exifPanelVision = value;
+                RaisePropertyChanged("ExifPanelVision");
+            }
+        }
 
         private bool _presentationRunning = false;
         public bool PresentationRunning
@@ -936,7 +959,6 @@ namespace Vision.ViewModels
 
         #endregion
 
-
         #region OpenAndSelect
         private void OpenAndSelect()
         {
@@ -944,5 +966,105 @@ namespace Vision.ViewModels
         }
         #endregion
 
+        private void NormalizeExifRotation(Func<ushort> func)
+        {
+            if (LoadSuccessfully)
+            {
+                UInt16 valor = func.Invoke();
+                if (valor > 0)
+                {
+                    Storyboard storyboard = new Storyboard();
+                    //storyboard.Completed += rotation_Completed;
+                    storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(0));
+                    DoubleAnimation rotateAnimation = new DoubleAnimation(Transform.Angle, Transform.Angle, storyboard.Duration);
+                    switch ((int)valor)
+                    {
+                        case 1:
+                            rotateAnimation = new DoubleAnimation(0, storyboard.Duration);
+                            break;
+                        //case 2: //
+                        //    rotateAnimation = new DoubleAnimation(90, storyboard.Duration);
+                        //    break;
+                        case 3:
+                            rotateAnimation = new DoubleAnimation(180, storyboard.Duration);
+                            break;
+                        //case 4: //
+                        //    rotateAnimation = new DoubleAnimation(270, storyboard.Duration);
+                        //    break;
+                        //case 5: //
+                        //    rotateAnimation = new DoubleAnimation(0, storyboard.Duration);
+                        //    break;
+                        case 6:
+                            rotateAnimation = new DoubleAnimation(90, storyboard.Duration);
+                            break;
+                        //case 7: //
+                        //    rotateAnimation = new DoubleAnimation(180, storyboard.Duration);
+                        //    break;
+                        case 8:
+                            rotateAnimation = new DoubleAnimation(270, storyboard.Duration);
+                            break;
+                    }
+
+                    Storyboard.SetTarget(rotateAnimation, Border);
+                    Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
+                    storyboard.Children.Add(rotateAnimation);
+                    storyboard.Begin();
+                }
+            }
+            else
+            {
+                LoadSuccessfully = true;
+            }
+
+            RaisePropertyChanged("CurrentPicture");
+        }
+
+        private ObservableCollection<string> _exifTags = new ObservableCollection<string>();
+        public ObservableCollection<string> ExifTags
+        {
+            get { return _exifTags; }
+            set
+            { 
+                _exifTags = value;
+                RaisePropertyChanged("ExifTags");
+            }
+        }
+
+        public void SwitchExifMetadata()
+        {
+            ExifPanelVision = !ExifPanelVision; 
+        }
+
+        private void ReadMetadata()
+        {
+            ExifTags.Clear();
+            ExifTags.Add("=== METADATA ===");
+            IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(CurrentPicture.Path);
+            foreach (var directory in directories)
+                foreach (var tag in directory.Tags)
+                ExifTags.Add(directory.Name + " - " + tag.Name + " = " + tag.Description);
+
+            RaisePropertyChanged("ExifTags");
+        } 
+
+        private void ReadMetadata2()
+        {
+            ExifTags.Clear();
+            ExifLibrary.ExifFile data = ExifLibrary.ExifFile.Read(CurrentPicture.Path);
+            ExifTags.Add("=== METADATA ===");
+            if (data.Properties.Count > 0)
+            {
+                foreach (ExifLibrary.ExifProperty item in data.Properties.Values)
+                {
+                    ExifTags.Add(item.Name + " : " + item.Value + " > " + item.IFD);
+                }
+            }
+            else
+            {
+                ExifTags.Add("No se encontraron datos");
+            }
+
+            RaisePropertyChanged("ExifTags");
+        }
     }
 }

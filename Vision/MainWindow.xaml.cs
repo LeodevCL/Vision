@@ -63,6 +63,9 @@ namespace Vision
                 case Key.Down:
                     ViewModel.ZoomOut();
                     break;
+                case Key.Tab:
+                    ViewModel.SwitchExifMetadata();
+                    break;
             }
         }
 

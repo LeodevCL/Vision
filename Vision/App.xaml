@@ -11,6 +11,7 @@
             <!-- Theme -->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Core\Themes\Button.xaml"/>
+                <ResourceDictionary Source="Core\Themes\ExifTagScrollTheme.xaml"/>
                 <!--<ResourceDictionary Source="Core\Themes\LeftScrollViewer.xaml"/>
                 <ResourceDictionary Source="Core\Themes\ScrollBarLineButton.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
