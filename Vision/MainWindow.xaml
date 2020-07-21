@@ -66,7 +66,7 @@
             </Rectangle.Triggers>
         </Rectangle>
         
-        <local:ZoomBorder x:Name="border" Margin="10" ClipToBounds="True" RenderTransformOrigin=".5,.5">
+        <local:ZoomBorder x:Name="border" Margin="15" ClipToBounds="True" RenderTransformOrigin=".5,.5">
             <local:ZoomBorder.RenderTransform>
                 <RotateTransform Angle="0" />
             </local:ZoomBorder.RenderTransform>
@@ -143,22 +143,44 @@
             </Button>
         </StackPanel>
 
-        <StackPanel Visibility="{Binding CtrlLeftVision, Converter={StaticResource BoolToVisibility}}" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
-            <Rectangle Width="3" Height="40" Fill="#7FF0F0F0" Margin="0,0,3,0"/>
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="{Binding CurrentPicture.Nombre, FallbackValue='---'}" ToolTip="Click para abrir el archivo en el explorador" Foreground="#FFCCCCCC" Cursor="Hand">
-                    <i:Interaction.Triggers>
+        <StackPanel Visibility="{Binding CtrlLeftVision, Converter={StaticResource BoolToVisibility}}" Cursor="Hand" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
+            <StackPanel.Style>
+                <Style>
+                    <Setter Property="StackPanel.Background" Value="Transparent"/>
+                    <Style.Triggers>
+                        <Trigger Property="StackPanel.IsMouseOver" Value="True">
+                            <Setter Property="Border.Background" Value="#7F094462" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+              </StackPanel.Style>
+                <Rectangle Width="3" Height="40" Fill="#7FF0F0F0" Margin="0,0,3,0"/>
+            <StackPanel Orientation="Vertical" ToolTip="Click para abrir el archivo en el explorador" >
+                <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
                         <i:InvokeCommandAction Command="{Binding OpenAndSelectCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
+                <TextBlock Text="{Binding CurrentPicture.Nombre, FallbackValue='---'}" Foreground="#FFCCCCCC">
                 </TextBlock>
                 <TextBlock Text="{Binding CurrentPicture, Converter={StaticResource ImageToResolution}, FallbackValue='---', TargetNullValue='---'}" Foreground="#FFCCCCCC" Margin="0,-3,0,0"/>
                 <TextBlock Text="{Binding CurrentPicture, Converter={StaticResource ImageToSize}, FallbackValue='---', TargetNullValue='---'}" Foreground="#FFCCCCCC" Margin="0,-3,0,0"/>
             </StackPanel>
         </StackPanel>
 
-        <TextBlock Visibility="{Binding PresentationRunning, Converter={StaticResource BoolToVisibility}}" HorizontalAlignment="Center" Margin="10,0" TextWrapping="Wrap" Text="Pulse ESC para salir de la presentación" VerticalAlignment="Bottom" Foreground="#4CFFFFFF" FontSize="10"/>
+        <TextBlock Visibility="{Binding PresentationRunning, Converter={StaticResource BoolToVisibility}}" HorizontalAlignment="Center" Margin="10,0" TextWrapping="Wrap" Text="Pulse ESC para salir de la presentación" VerticalAlignment="Bottom" Foreground="#4CFFFFFF" FontSize="10">
+            <TextBlock.Triggers>
+                <EventTrigger RoutedEvent="Rectangle.Loaded">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard TargetProperty="Opacity" RepeatBehavior="Forever">
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:2" AutoReverse="True" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </TextBlock.Triggers>
+        </TextBlock>
 
         <!-- BARRA DE COMANDOS -->
         <Grid Visibility="{Binding CommandBarVision, Converter={StaticResource BoolToVisibility}}" VerticalAlignment="Bottom" Margin="0" Opacity="0.995" Grid.Row="1">
