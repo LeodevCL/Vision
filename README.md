@@ -17,6 +17,8 @@ Visor de Imágenes en C# para Windows 10
 
 * MetadataExtractor - Para manejo de metadatos EXIF y otros. [Github](https://github.com/drewnoakes/metadata-extractor-dotnet) | [Nuget](https://www.nuget.org/packages/MetadataExtractor/)
 
+* XmpCore - Requerido por MetadataExtractor, es un port de Adobe's XMP SDK para .NET. [Github](https://github.com/drewnoakes/xmp-core-dotnet/) | [Nuget](https://www.nuget.org/packages/XmpCore/)
+
 ![Vision MainWindow](https://raw.githubusercontent.com/LeodevCL/Vision/master/Vision/example02.png)
 
 
