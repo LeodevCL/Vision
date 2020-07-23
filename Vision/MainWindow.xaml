@@ -252,13 +252,13 @@
         </Grid>
 
         <!-- MINIATURAS -->
-        <ListBox VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" Opacity="{Binding PresentationRunning, Converter={StaticResource BoolToListOpacity}}" ItemsSource="{Binding Pictures, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPicture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="{x:Null}" HorizontalAlignment="Center" ScrollViewer.CanContentScroll="True" BorderBrush="{x:Null}" BorderThickness="0" HorizontalContentAlignment="Center">
+        <ListBox VirtualizingPanel.IsVirtualizing="True" Opacity="{Binding PresentationRunning, Converter={StaticResource BoolToListOpacity}}" ItemsSource="{Binding Pictures, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPicture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="{x:Null}" HorizontalAlignment="Center" ScrollViewer.CanContentScroll="True" BorderBrush="{x:Null}" BorderThickness="0" HorizontalContentAlignment="Center">
             <i:Interaction.Behaviors>
                 <b:ScrollIntoViewForListBox/>
             </i:Interaction.Behaviors>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal" />
+                    <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal" VirtualizingPanel.VirtualizationMode="Recycling"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemContainerStyle>
