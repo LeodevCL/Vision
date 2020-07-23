@@ -100,6 +100,7 @@
     <Compile Include="Core\Magic.cs" />
     <Compile Include="Core\IEnlace.cs" />
     <Compile Include="Core\SettingsManager.cs" />
+    <Compile Include="Core\WindowsFileNameComparer.cs" />
     <Compile Include="Models\Programa.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Models\Picture.cs" />
