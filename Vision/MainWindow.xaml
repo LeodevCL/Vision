@@ -154,15 +154,14 @@
                     </Style.Triggers>
                 </Style>
               </StackPanel.Style>
-                <Rectangle Width="3" Height="40" Fill="#7FF0F0F0" Margin="0,0,3,0"/>
+             <Rectangle Width="3" Height="40" Fill="#7FF0F0F0" Margin="0,0,3,0"/>
             <StackPanel Orientation="Vertical" ToolTip="Click para abrir el archivo en el explorador" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
                         <i:InvokeCommandAction Command="{Binding OpenAndSelectCommand}"/>
                     </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <TextBlock Text="{Binding CurrentPicture.Nombre, FallbackValue='---'}" Foreground="#FFCCCCCC">
-                </TextBlock>
+                </i:Interaction.Triggers> 
+                <TextBlock Text="{Binding CurrentPicture.Nombre, FallbackValue='---'}" Foreground="#FFCCCCCC"/>
                 <TextBlock Text="{Binding CurrentPicture, Converter={StaticResource ImageToResolution}, FallbackValue='---', TargetNullValue='---'}" Foreground="#FFCCCCCC" Margin="0,-3,0,0"/>
                 <TextBlock Text="{Binding CurrentPicture, Converter={StaticResource ImageToSize}, FallbackValue='---', TargetNullValue='---'}" Foreground="#FFCCCCCC" Margin="0,-3,0,0"/>
             </StackPanel>
@@ -253,7 +252,7 @@
         </Grid>
 
         <!-- MINIATURAS -->
-        <ListBox VirtualizingPanel.VirtualizationMode="Recycling" Opacity="{Binding PresentationRunning, Converter={StaticResource BoolToListOpacity}}" ItemsSource="{Binding Pictures, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPicture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="{x:Null}" HorizontalAlignment="Center" ScrollViewer.CanContentScroll="True" BorderBrush="{x:Null}" BorderThickness="0" HorizontalContentAlignment="Center">
+        <ListBox VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" Opacity="{Binding PresentationRunning, Converter={StaticResource BoolToListOpacity}}" ItemsSource="{Binding Pictures, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPicture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="{x:Null}" HorizontalAlignment="Center" ScrollViewer.CanContentScroll="True" BorderBrush="{x:Null}" BorderThickness="0" HorizontalContentAlignment="Center">
             <i:Interaction.Behaviors>
                 <b:ScrollIntoViewForListBox/>
             </i:Interaction.Behaviors>

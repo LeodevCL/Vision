@@ -410,7 +410,6 @@ namespace Vision.ViewModels
         {
             get 
             {  
-                //return Pictures.Count > 0; 
                 if (ImageOnlyVision)
                 {
                     if (Pictures.FirstImage != null)
@@ -527,23 +526,20 @@ namespace Vision.ViewModels
 
         private void CargarArchivosCompatibles()
         {
-            Task t = ProcessCollectionAsync();
-        }
-
-        async Task ProcessCollectionAsync()
-        {
-            await Task.Run(() => LimpiarColecciones());
-            await Task.Run(() => CargarPrimeraImagen());
-            if (SettingsManager.Load("OnlySelected") != 1)
+            Task tsk = Task.Run(async () =>
             {
-                await Task.Run(() => CargarImagenesCompatibles());
-                ImageOnlyVision = false;
-            }
-            else
-            {
-                ImageOnlyVision = true;
-            }
-            //ShowDebugInfo();
+                await Task.Run(() => LimpiarColecciones());
+                await Task.Run(() => CargarPrimeraImagen());
+                if (SettingsManager.Load("OnlySelected") != 1)
+                {
+                    await Task.Run(() => CargarImagenesCompatibles());
+                    ImageOnlyVision = false;
+                }
+                else
+                {
+                    ImageOnlyVision = true;
+                }
+            });
         }
 
         private void LimpiarColecciones()
@@ -565,36 +561,49 @@ namespace Vision.ViewModels
 
         private void CargarImagenesCompatibles()
         {
-            Task t = CargarImagenesCompatiblesAsync();
-        } 
-
-        async Task CargarImagenesCompatiblesAsync()
-        {
             try
             {
-                List<FileInfo> lista = await Task.Run(() => ListarImagenesCompatibles());
-                for (int i = 0; i < lista.Count; i++)
+                Task tsk = Task.Run(async () =>
                 {
+                    List<FileInfo> lista = await Task.Run(() => ListarImagenesCompatibles());
                     Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        for (int i = 0; i < lista.Count; i++)
                         {
                             Pictures.Add(new Picture(lista[i], i));
                             if (CurrentPicture.Path.Equals(lista[i].FullName))
                             {
                                 CurrentPicture = Pictures[i];
                             }
-                        }));                    
-                }
+                        }
+                    }));
+                });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            } 
         }
 
         private List<FileInfo> ListarImagenesCompatibles()
         {
-            List<FileInfo> files = new DirectoryInfo(Pictures.FirstImage.Info.Directory.FullName).GetFiles("*.*", SearchOption.TopDirectoryOnly).Where(s => s.Extension.MatchesWith(".jpg", ".jpeg", ".gif", ".jfif", ".png", ".bmp", ".emf", ".wmf", ".ico", ".exif", ".tiff", ".tif", ".webp")).ToArray<FileInfo>().ToList();
-            return SettingsManager.Load("IgnoreHidden") == 1 ? files.Where(f => !f.Attributes.HasFlag(FileAttributes.Hidden)).ToList() : files;            
+            try
+            {
+                string folder = Pictures.FirstImage.Info.Directory.FullName;
+                List<FileInfo> files = new DirectoryInfo(Pictures.FirstImage.Info.Directory.FullName)
+                    .GetFiles("*.*", SearchOption.TopDirectoryOnly)
+                    .Where(s => s.Extension.MatchesWith(".jpg", ".jpeg", ".gif", ".jfif", ".png", ".bmp", ".emf", ".wmf", ".ico", ".exif", ".tiff", ".tif", ".webp"))
+                    .ToList<FileInfo>();
+
+                files.Sort(new WindowsFileNameComparer());
+                return SettingsManager.Load("IgnoreHidden") == 1 ? files.Where(f => !f.Attributes.HasFlag(FileAttributes.Hidden)).ToList() : files;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error cargando archivos", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return new List<FileInfo>();
         }
 
         #endregion
