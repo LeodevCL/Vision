@@ -2,9 +2,11 @@
 Visor de Imágenes en C# para Windows 10
 
 ## Descarga
-Vision v1.20.08.05a
+Versión v1.20.08.05a
 
-[VERSIÓN PORTABLE](https://github.com/LeodevCL/Vision/raw/master/Vision_1_20_08_5.zip)
+Tamaño: 566kb
+
+Link [VERSIÓN PORTABLE](https://github.com/LeodevCL/Vision/raw/master/Vision_1_20_08_5.zip)
 
 ## Construido con 🛠️
 
