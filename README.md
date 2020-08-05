@@ -1,6 +1,9 @@
 # Vision
 Visor de Imágenes en C# para Windows 10
 
+# Descarga
+[VERSIÓN PORTABLE](https://github.com/LeodevCL/Vision/raw/master/Vision_1_20_08_5.zip)
+
 ## Construido con 🛠️
 
 * IDE: [Visual Studio 2013](https://visualstudio.microsoft.com/es/)
