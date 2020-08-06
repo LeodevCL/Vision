@@ -1,5 +1,5 @@
 # Vision
-Visor de Imágenes en C# para Windows 10
+Visor de Imágenes ultraligero escrito en C# para Windows 10
 
 ## Descarga
 Versión v1.20.08.05a
