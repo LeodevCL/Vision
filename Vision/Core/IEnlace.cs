@@ -9,7 +9,6 @@ namespace Vision
 
     public class IGeneric : IEnlace, INotifyPropertyChanged
     {
-
         #region Implementación de INotifyPropertyChanged
         protected void RaisePropertyChanged(string propertyName)
         {
@@ -24,6 +23,5 @@ namespace Vision
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
-
     }
 }

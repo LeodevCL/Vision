@@ -237,15 +237,6 @@
                         <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_rotr}" Icon="RotateRight" Spin="False" />
                     </Button>
                 </StackPanel>
-
-                <!--<StackPanel Orientation="Horizontal" Margin="25,0,0,0" >
-                    <Button Style="{StaticResource IconButton}" x:Name="bt_stop" Command="{Binding ZoomOutCommand}" Cursor="Hand" ToolTip="Alejar" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,5,0">
-                        <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_zoou}" Icon="Pause" Spin="False" />
-                    </Button>
-                    <Button Style="{StaticResource IconButton}" x:Name="bt_pause" Command="{Binding ZoomInCommand}" Cursor="Hand" ToolTip="Acercar" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
-                        <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_zooi}" Icon="Play" Spin="False" />
-                    </Button>
-                </StackPanel>-->
             </StackPanel>
 
             
@@ -276,18 +267,9 @@
                             </Image.Source>
                         </Image>
                     </Border>
-                    <!--<DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
-                            -->
-                    <!--<Setter Property="BorderBrush" TargetName="PART_border" Value="Gray"/>-->
-                    <!--<Setter Property="Background" TargetName="PART_border" Value="#7F808080"/>-->
-                    <!--
-                        </DataTrigger>
-                    </DataTemplate.Triggers>-->
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ProgressBar Visibility="{Binding BarVision, Converter={StaticResource BoolToVisibility}}" Height="3" Margin="0,3,0,0" Grid.Row="1" VerticalAlignment="Top" HorizontalContentAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#7FFFFFFF" IsIndeterminate="True"/>
         <TextBlock Visibility="{Binding ImageOnlyVision, Converter={StaticResource BoolToVisibility}}" HorizontalAlignment="Center" Margin="0,0,0,10" TextWrapping="Wrap" Text="VISION está en modo de imagen individual, cambie los ajustes para mostrar todas las imágenes de la carpeta" VerticalAlignment="Bottom" Foreground="#4CFFFFFF" Grid.RowSpan="3" FontSize="10"/>
     </Grid>
 </Window>

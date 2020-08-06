@@ -2,9 +2,6 @@
 
 namespace Vision.Views
 {
-    /// <summary>
-    /// Lógica de interacción para SettingsDialog.xaml
-    /// </summary>
     public partial class SettingsDialog : Window
     {
         public SettingsDialog()
@@ -28,12 +25,5 @@ namespace Vision.Views
 
             DialogResult = true;
         }
-
-        private void OnCheck(object sender, RoutedEventArgs e)
-        {
-            //int value = (((CheckBox)sender).IsChecked.Value) ? 1 : 0;
-            //SettingsManager.Save("InstanceType", value);
-        }
-
     }
 }

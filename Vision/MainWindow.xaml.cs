@@ -5,9 +5,6 @@ using Vision.ViewModels;
 
 namespace Vision
 {
-    /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private MainViewModel ViewModel;
