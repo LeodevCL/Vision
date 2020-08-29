@@ -81,7 +81,19 @@
                     <i:InvokeCommandAction Command="{Binding LoadBorderCommand}" CommandParameter="{Binding ElementName=border}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-            <Image gif:ImageBehavior.AnimatedSource="{Binding CurrentPicture.Path}" />
+            <Image gif:ImageBehavior.AnimatedSource="{Binding CurrentPicture.Path}">
+                <Image.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding SetAsWallpaperCommand}" Header="Establecer como fondo de Escritorio" />
+                        <Separator />
+                        <MenuItem Command="{Binding PrintFileCommand}" Header="Imprimir imagen" />
+                        <MenuItem Command="{Binding SaveAsCommand}" Header="Guardar como" />
+                        <MenuItem Command="{Binding OpenFileInFolderCommand}" Header="Localizar archivo en disco" />
+                        <Separator />
+                        <MenuItem Command="{Binding ShowSettingsCommand}" Header="Ajustes de Vision" />
+                    </ContextMenu>
+                </Image.ContextMenu>
+            </Image>
         </local:ZoomBorder>
 
         <Grid Visibility="{Binding ExifPanelVision, Converter={StaticResource BoolToVisibility}}" Background="#7F094462" HorizontalAlignment="Left" MinWidth="250" Margin="10,75,10,25">

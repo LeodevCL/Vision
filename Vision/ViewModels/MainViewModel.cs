@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -403,6 +404,17 @@ namespace Vision.ViewModels
             }
         }
 
+        private ICommand _setAsWallpaperCommand;
+        public ICommand SetAsWallpaperCommand
+        {
+            get
+            {
+                if (_setAsWallpaperCommand == null)
+                    _setAsWallpaperCommand = new RelayCommand(new Action(SetAsWallpaper));
+                return _setAsWallpaperCommand;
+            }
+        }
+
         #endregion
 
         #region Condicionantes de ICommands
@@ -479,6 +491,43 @@ namespace Vision.ViewModels
             MessageBox.Show(mensaje, "Información de depuración", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        #endregion
+
+        #region SetAsWallpaper
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool SystemParametersInfo(uint uiAction, uint uiParam, String pvParam, uint fWinIni);
+
+        private const uint SPI_SETDESKWALLPAPER = 0x14;
+        private const uint SPIF_UPDATEINIFILE = 0x1;
+        private const uint SPIF_SENDWININICHANGE = 0x2;
+        private void SetAsWallpaper()
+        {
+            //update_registry indica si el cambio es permanente
+            //por ahora lo será siempre, más adelante pondré la opción para que se revierta al cerrar sesión
+            bool update_registry = true;
+            try
+            {
+                // Si debemos actualizar el registro, poner las flags apropiadas
+                uint flags = 0;
+                if (update_registry)
+                    flags = SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE;
+
+                if (!SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, CurrentPicture.Path, flags))
+                {
+                    MessageBox.Show("Fallo de SystemParametersInfo.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+                else
+                {
+                    MessageBox.Show("La imagen se aplicó!", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error desplegando imagen " + CurrentPicture.Path + ".\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+        }
         #endregion
 
         #region LoadBorder

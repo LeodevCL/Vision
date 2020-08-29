@@ -75,5 +75,6 @@ namespace Vision
         {
             this.WindowState = System.Windows.WindowState.Minimized;
         }
+
     }
 }
