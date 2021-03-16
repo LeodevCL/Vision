@@ -8,13 +8,22 @@ namespace Vision
         private Picture _firstImage;
         public Picture FirstImage
         {
-            get { return _firstImage; }
-            set { _firstImage = value; }
+            get
+            {
+                return _firstImage;
+            }
+            set
+            {
+                _firstImage = value;
+            }
         }
 
         public Picture Primera
         {
-            get { return this[0]; }
+            get
+            {
+                return this[0];
+            }
         }
 
         public Picture Anterior(Picture actual)
@@ -24,21 +33,82 @@ namespace Vision
                 return actual;
             }
             return this[actual.Indice - 1];
+            //if (actual != null)
+            //{
+            //    if (actual.Indice == Primera.Indice)
+            //    {
+            //        return actual;
+            //    }
+            //    return this[actual.Indice - 1];
+            //}
+            //else
+            //{
+            //    return null;
+            //}
         }
 
         public Picture Siguiente(Picture actual)
         {
-            if(actual.Indice == Ultima.Indice)
+            if (actual.Indice == Ultima.Indice)
             {
                 return actual;
             }
             return this[actual.Indice + 1];
+            //if (actual != null)
+            //{
+            //    if (actual.Indice == Ultima.Indice)
+            //    {
+            //        return actual;
+            //    }
+            //    return this[actual.Indice + 1];
+            //}
+            //else
+            //{
+            //    return null;
+            //}
         }
 
         public Picture Ultima
         {
-            get { return this[this.Count - 1]; }
+            get
+            {
+                return this[this.Count - 1];
+            }
         }
+
+        //public bool PrevPicture(Picture picture)
+        //{
+        //    for (int i = 0; i < this.Count; i++)
+        //    {
+        //        if (this[i] == picture && i == 0)
+        //        {
+        //            return false;
+        //        }
+        //    }
+
+        //    return true;
+        //}
+
+        //public bool PostPicture(Picture picture)
+        //{
+        //    for (int i = 0; i < this.Count; i++)
+        //    {
+        //        if (this[i] == picture && i < this.Count - 1)
+        //        {
+        //            return false;
+        //        }
+        //    }
+
+        //    return true;
+        //}
+
+        //public void RemapIndexes()
+        //{
+        //    for (int i = 0; i < this.Count; i++)
+        //    {
+        //        this[i].Indice = i;
+        //    }
+        //}
     }
 
     public class Picture : IGeneric
@@ -48,7 +118,10 @@ namespace Vision
         private FileInfo _info;
         public FileInfo Info
         {
-            get { return _info; }
+            get
+            {
+                return _info;
+            }
             set
             {
                 _info = value;
@@ -67,7 +140,10 @@ namespace Vision
         /// </summary>
         public string Path
         {
-            get { return Info.FullName; }
+            get
+            {
+                return Info.FullName;
+            }
         }
 
         /// <summary>
@@ -75,7 +151,10 @@ namespace Vision
         /// </summary>
         public string Directorio
         {
-            get { return Info.DirectoryName; }
+            get
+            {
+                return Info.DirectoryName;
+            }
         }
 
         /// <summary>
@@ -83,15 +162,21 @@ namespace Vision
         /// </summary>
         public string Nombre
         {
-            get { return Info.Name; }
+            get
+            {
+                return Info.Name;
+            }
         }
-        
+
         /// <summary>
         /// Devuelve la extensión del archivo
         /// </summary>
         public string Extension
         {
-            get { return System.IO.Path.GetExtension(Path); }
+            get
+            {
+                return System.IO.Path.GetExtension(Path);
+            }
         }
 
         /// <summary>
@@ -99,12 +184,18 @@ namespace Vision
         /// </summary>
         public long Peso
         {
-            get { return Info.Length; }
+            get
+            {
+                return Info.Length;
+            }
         }
 
         public System.Drawing.Image Imagen
         {
-            get { return System.Drawing.Image.FromFile(Path); }
+            get
+            {
+                return System.Drawing.Image.FromFile(Path);
+            }
         }
 
         /// <summary>
@@ -112,7 +203,10 @@ namespace Vision
         /// </summary>
         public int Ancho
         {
-            get { return Imagen.Width; }
+            get
+            {
+                return Imagen.Width;
+            }
         }
 
         /// <summary>
@@ -120,7 +214,10 @@ namespace Vision
         /// </summary>
         public int Alto
         {
-            get { return Imagen.Height; }
+            get
+            {
+                return Imagen.Height;
+            }
         }
 
         /// <summary>
@@ -129,8 +226,11 @@ namespace Vision
         private int _indice;
         public int Indice
         {
-            get { return _indice; }
-            set 
+            get
+            {
+                return _indice;
+            }
+            set
             {
                 _indice = value;
                 RaisePropertyChanged("Indice");
@@ -139,7 +239,10 @@ namespace Vision
 
         public bool PrimeraImagen
         {
-            get { return Indice == 0; }
+            get
+            {
+                return Indice == 0;
+            }
         }
 
         public Picture()
@@ -188,11 +291,11 @@ namespace Vision
 
                 return 0;
             }
-            catch(System.Exception)
+            catch (System.Exception)
             {
                 return 0;
             }
         }
-      
+
     }
 }

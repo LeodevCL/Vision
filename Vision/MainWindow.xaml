@@ -6,7 +6,7 @@
         xmlns:b="clr-namespace:Vision.Behaviors"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
-        Title="Vision" Height="720" Width="1280" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" AllowsTransparency="True" WindowStyle="None" KeyDown="OnKeyDown" Icon="icon.ico" WindowState="Maximized">
+        Title="Vision" Height="720" Width="1280" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" AllowsTransparency="True" WindowStyle="None" KeyDown="OnKeyDown" MouseDown="OnMouseDown" Icon="icon.ico" WindowState="Maximized">
 
     <Grid DataContext="{StaticResource MainVM}" x:Name="grid_main">
         <Grid.RowDefinitions>
@@ -81,12 +81,14 @@
                     <i:InvokeCommandAction Command="{Binding LoadBorderCommand}" CommandParameter="{Binding ElementName=border}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+            <!--<Image gif:ImageBehavior.AnimatedSource="{Binding CurrentPicture.Path, Mode=OneWay}">-->
             <Image gif:ImageBehavior.AnimatedSource="{Binding CurrentPicture.Path}">
                 <Image.ContextMenu>
                     <ContextMenu>
                         <MenuItem Command="{Binding SetAsWallpaperCommand}" Header="Establecer como fondo de Escritorio" />
                         <Separator />
                         <MenuItem Command="{Binding PrintFileCommand}" Header="Imprimir imagen" />
+                        <MenuItem Command="{Binding PrintFile2Command}" Header="Imprimir imagen 2" /> 
                         <MenuItem Command="{Binding SaveAsCommand}" Header="Guardar como" />
                         <MenuItem Command="{Binding OpenFileInFolderCommand}" Header="Localizar archivo en disco" />
                         <Separator />
@@ -211,9 +213,12 @@
                 <Button Style="{StaticResource IconButton}" x:Name="bt_save" Command="{Binding SaveAsCommand}" Cursor="Hand" ToolTip="Guardar como" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
                     <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_save}" Icon="FloppyOutline" Spin="False" />
                 </Button>
-                <Button Style="{StaticResource IconButton}" x:Name="bt_find" Command="{Binding OpenFileInFolderCommand}" Cursor="Hand" ToolTip="Localizar archivo en disco" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0,10,0">
+                <Button Style="{StaticResource IconButton}" x:Name="bt_find" Command="{Binding OpenFileInFolderCommand}" Cursor="Hand" ToolTip="Localizar archivo en disco" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0">
                     <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_find}" Icon="FolderOpen" Spin="False" />
                 </Button>
+                <!--<Button Style="{StaticResource IconButton}" x:Name="bt_delete" Command="{Binding DeleteFileCommand}" Cursor="Hand" ToolTip="Eliminar archivo del disco" Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5,0,10,0">
+                    <fa:ImageAwesome Foreground="{Binding Foreground, ElementName=bt_delete}" Icon="Trash" Spin="False" />
+                </Button>-->
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center">

@@ -20,6 +20,12 @@ namespace Vision
                 {
                     ViewModel.IniciarCarga(App.TracedFile.FullName);
                 }
+                 
+                KeyBinding rotateLCommandBind = new KeyBinding(ViewModel.RotateLeftCommand, Key.Left, ModifierKeys.Control);
+                KeyBinding rotateRCommandBind = new KeyBinding(ViewModel.RotateRightCommand, Key.Right, ModifierKeys.Control);
+                this.InputBindings.Add(rotateLCommandBind);
+                this.InputBindings.Add(rotateRCommandBind);
+
             }
             catch (InvalidOperationException ex)
             {
@@ -33,6 +39,7 @@ namespace Vision
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
+            //Console.WriteLine("Key: " + e.Key + " " + e.Key.ToString());
             switch (e.Key)
             {
                 case Key.Escape:
@@ -44,6 +51,9 @@ namespace Vision
                     {
                         this.Close();
                     }
+                    break;
+                case Key.O:
+                    ViewModel.OpenFile();
                     break;
                 case Key.LeftCtrl:
                     ViewModel.CtrlLeftVision = !ViewModel.CtrlLeftVision;
@@ -63,6 +73,12 @@ namespace Vision
                 case Key.Tab:
                     ViewModel.SwitchExifMetadata();
                     break;
+                case Key.Home:
+                    ViewModel.MoverPrimera();
+                    break;
+                case Key.End:
+                    ViewModel.MoverUltima();
+                    break;
             }
         }
 
@@ -74,6 +90,19 @@ namespace Vision
         private void OnMinimize(object sender, RoutedEventArgs e)
         {
             this.WindowState = System.Windows.WindowState.Minimized;
+        }
+
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.XButton1)
+            {
+                ViewModel.MoverAnterior();
+            }
+
+            if (e.ChangedButton == MouseButton.XButton2)
+            {
+                ViewModel.MoverSiguiente();
+            }
         }
 
     }

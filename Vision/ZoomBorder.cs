@@ -26,7 +26,10 @@ namespace Vision
 
         public override UIElement Child
         {
-            get { return base.Child; }
+            get
+            {
+                return base.Child;
+            }
             set
             {
                 if (value != null && value != this.Child)
@@ -111,7 +114,7 @@ namespace Vision
                 Point relative = e.GetPosition(child);
                 double absoluteX;
                 double absoluteY;
-                double zoomCorrected = zoom * st.ScaleX; 
+                double zoomCorrected = zoom * st.ScaleX;
 
                 absoluteX = relative.X * st.ScaleX + tt.X;
                 absoluteY = relative.Y * st.ScaleY + tt.Y;

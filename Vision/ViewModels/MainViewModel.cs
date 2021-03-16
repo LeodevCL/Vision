@@ -3,12 +3,12 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -22,7 +22,10 @@ namespace Vision.ViewModels
         private PictureCollection _pictures = new PictureCollection();
         public PictureCollection Pictures
         {
-            get { return _pictures; }
+            get
+            {
+                return _pictures;
+            }
             set
             {
                 _pictures = value;
@@ -32,43 +35,66 @@ namespace Vision.ViewModels
                 RaisePropertyChanged("CanMoveFirst");
                 RaisePropertyChanged("CanMovePrev");
                 RaisePropertyChanged("CanMoveNext");
-                RaisePropertyChanged("CanMoveLast"); 
+                RaisePropertyChanged("CanMoveLast");
             }
         }
 
         private bool _loadSuccessfully = false;
         public bool LoadSuccessfully
         {
-            get { return _loadSuccessfully; }
-            set { _loadSuccessfully = value; }
+            get
+            {
+                return _loadSuccessfully;
+            }
+            set
+            {
+                _loadSuccessfully = value;
+            }
         }
 
         private Picture _currentPicture;
         public Picture CurrentPicture
         {
-            get { return _currentPicture; }
+            get
+            {
+                return _currentPicture;
+            }
             set
             {
-                ResetAllMods();
-                _currentPicture = value;
-                RaisePropertyChanged("CurrentPicture");
-                RaisePropertyChanged("LogoVision");
-                RaisePropertyChanged("CanRotate");
-                NormalizeExifRotation(value.ExifOrientation);
-                ReadMetadata();
+                try
+                {
+                    ResetAllMods();
+                    _currentPicture = value;
+                    RaisePropertyChanged("CurrentPicture");
+                    RaisePropertyChanged("LogoVision");
+                    RaisePropertyChanged("CanRotate");
+                    NormalizeExifRotation(value.ExifOrientation);
+                    ReadMetadata();
+                }
+                catch (System.ArgumentException)
+                {
+                    Console.WriteLine("Excepción controlada por asignación nula (ignorar)");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error por asignación de null a value u otra excepción: " + ex.ToString());
+                }
             }
         }
 
         private ObservableCollection<string> _exifTags = new ObservableCollection<string>();
         public ObservableCollection<string> ExifTags
         {
-            get { return _exifTags; }
+            get
+            {
+                return _exifTags;
+            }
             set
             {
                 _exifTags = value;
                 RaisePropertyChanged("ExifTags");
             }
-        } 
+        }
 
         public bool LogoVision
         {
@@ -81,7 +107,10 @@ namespace Vision.ViewModels
         private bool _ctrlLeftVision = false;
         public bool CtrlLeftVision
         {
-            get { return _ctrlLeftVision; }
+            get
+            {
+                return _ctrlLeftVision;
+            }
             set
             {
                 _ctrlLeftVision = value;
@@ -92,7 +121,10 @@ namespace Vision.ViewModels
         private bool _ctrlRightVision = true;
         public bool CtrlRightVision
         {
-            get { return _ctrlRightVision; }
+            get
+            {
+                return _ctrlRightVision;
+            }
             set
             {
                 _ctrlRightVision = value;
@@ -103,7 +135,10 @@ namespace Vision.ViewModels
         private bool _barVision = false;
         public bool BarVision
         {
-            get { return _barVision; }
+            get
+            {
+                return _barVision;
+            }
             set
             {
                 _barVision = value;
@@ -114,7 +149,10 @@ namespace Vision.ViewModels
         private bool _commandBarVision = true;
         public bool CommandBarVision
         {
-            get { return _commandBarVision; }
+            get
+            {
+                return _commandBarVision;
+            }
             set
             {
                 _commandBarVision = value;
@@ -125,7 +163,10 @@ namespace Vision.ViewModels
         private bool _imageOnlyVision = false;
         public bool ImageOnlyVision
         {
-            get { return _imageOnlyVision; }
+            get
+            {
+                return _imageOnlyVision;
+            }
             set
             {
                 _imageOnlyVision = value;
@@ -136,7 +177,10 @@ namespace Vision.ViewModels
         private bool _exifPanelVision = false;
         public bool ExifPanelVision
         {
-            get { return _exifPanelVision; }
+            get
+            {
+                return _exifPanelVision;
+            }
             set
             {
                 _exifPanelVision = value;
@@ -147,9 +191,12 @@ namespace Vision.ViewModels
         private bool _presentationRunning = false;
         public bool PresentationRunning
         {
-            get { return _presentationRunning; }
+            get
+            {
+                return _presentationRunning;
+            }
             set
-            { 
+            {
                 _presentationRunning = value;
                 RaisePropertyChanged("PresentationRunning");
                 CommandBarVision = !value;
@@ -159,9 +206,12 @@ namespace Vision.ViewModels
         private double _listOpacity = 100;
         public double ListOpacity
         {
-            get { return _listOpacity; }
-            set 
-            { 
+            get
+            {
+                return _listOpacity;
+            }
+            set
+            {
                 _listOpacity = value;
                 RaisePropertyChanged("ListOpacity");
             }
@@ -170,8 +220,11 @@ namespace Vision.ViewModels
         private ZoomBorder _border;
         public ZoomBorder Border
         {
-            get { return _border; }
-            set 
+            get
+            {
+                return _border;
+            }
+            set
             {
                 _border = value;
                 RaisePropertyChanged("Border");
@@ -184,14 +237,20 @@ namespace Vision.ViewModels
 
         public System.Windows.Controls.Image Imagen
         {
-            get { return Border == null? null : (System.Windows.Controls.Image)_border.Child; }
+            get
+            {
+                return Border == null ? null : (System.Windows.Controls.Image)_border.Child;
+            }
         }
 
         public RotateTransform Transform
         {
-            get { return Border == null ? null : (RotateTransform)Border.RenderTransform;  }
+            get
+            {
+                return Border == null ? null : (RotateTransform)Border.RenderTransform;
+            }
         }
-         
+
 
         #region ICommands
 
@@ -228,6 +287,17 @@ namespace Vision.ViewModels
             }
         }
 
+        private ICommand _printFile2Command;
+        public ICommand PrintFile2Command
+        {
+            get
+            {
+                if (_printFile2Command == null)
+                    _printFile2Command = new RelayCommand(new Action(PrintFile2), () => CanExecute);
+                return _printFile2Command;
+            }
+        }
+
         private ICommand _saveAsCommand;
         public ICommand SaveAsCommand
         {
@@ -249,6 +319,17 @@ namespace Vision.ViewModels
                 return _openFileInFolderCommand;
             }
         }
+
+        //private ICommand _deleteFileCommand;
+        //public ICommand DeleteFileCommand
+        //{
+        //    get
+        //    {
+        //        if (_deleteFileCommand == null)
+        //            _deleteFileCommand = new RelayCommand(new Action(DeleteFile), () => CanExecute);
+        //        return _deleteFileCommand;
+        //    }
+        //}
 
         private ICommand _moverPrimeraCommand;
         public ICommand MoverPrimeraCommand
@@ -420,8 +501,8 @@ namespace Vision.ViewModels
         #region Condicionantes de ICommands
         private bool CanExecute
         {
-            get 
-            {  
+            get
+            {
                 if (ImageOnlyVision)
                 {
                     if (Pictures.FirstImage != null)
@@ -442,27 +523,55 @@ namespace Vision.ViewModels
 
         private bool CanMoveFirst
         {
-            get { return Pictures.Count > 0 && CurrentPicture.Indice != 0; }
+            get
+            {
+                if (CurrentPicture != null)
+                {
+                    return Pictures.Count > 0 && CurrentPicture.Indice != 0;
+                }
+                return false;
+            }
         }
 
         private bool CanMovePrev
         {
-            get { return Pictures.Count > 0 && CurrentPicture.Indice > 0; }
+            get
+            {
+                if (CurrentPicture != null)
+                {
+                    return Pictures.Count > 0 && CurrentPicture.Indice > 0;
+                }
+                return false;
+            }
         }
 
         private bool CanMoveNext
         {
-            get { return Pictures.Count > 0 && CurrentPicture.Indice < Pictures.Count - 1; }
+            get
+            {
+                if (CurrentPicture != null)
+                {
+                    return Pictures.Count > 0 && CurrentPicture.Indice < Pictures.Count - 1;
+                }
+                return false;
+            }
         }
 
         private bool CanMoveLast
         {
-            get { return Pictures.Count > 0 && CurrentPicture.Indice != Pictures.Count - 1; }
+            get
+            {
+                if (CurrentPicture != null)
+                {
+                    return Pictures.Count > 0 && CurrentPicture.Indice != Pictures.Count - 1;
+                }
+                return false;
+            }
         }
 
         private bool CanRotate
         {
-            get 
+            get
             {
                 if (ImageOnlyVision)
                 {
@@ -542,7 +651,7 @@ namespace Vision.ViewModels
         #endregion
 
         #region OpenFile
-        private void OpenFile()
+        public void OpenFile()
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "Archivos de Imagen|*.jpg;*.jpeg;*.gif;*.jfif;*.png;*.bmp;*.emf;*.wmf;*.ico;*.exif;*.tiff;*.tif;*.webp|Todos los archivos (*.*)|*.*";
@@ -551,7 +660,7 @@ namespace Vision.ViewModels
             {
                 try
                 {
-                    IniciarCarga(dialog.FileName);                    
+                    IniciarCarga(dialog.FileName);
                 }
                 catch (Exception ex)
                 {
@@ -631,7 +740,7 @@ namespace Vision.ViewModels
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            } 
+            }
         }
 
         private List<FileInfo> ListarImagenesCompatibles()
@@ -645,9 +754,10 @@ namespace Vision.ViewModels
                     .ToList<FileInfo>();
 
                 files.Sort(new WindowsFileNameComparer());
+                Pictures.FirstImage = null; //Limpio y evito que la imagen se bloquée al tratar de borrar
                 return SettingsManager.Load("IgnoreHidden") == 1 ? files.Where(f => !f.Attributes.HasFlag(FileAttributes.Hidden)).ToList() : files;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error cargando archivos", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -670,6 +780,31 @@ namespace Vision.ViewModels
             info.CreateNoWindow = true;
             info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             System.Diagnostics.Process.Start(info);
+        }
+
+        private void PrintFile2()
+        {
+            ImprimirMetodo2();
+        }
+
+
+        private void ImprimirMetodo2()
+        {
+            //PrintDocument pd = new PrintDocument();
+            //pd.PrintPage += pd_PrintPage;
+
+            //PrintDialog printPreviewDialog1 = new PrintDialog();
+            //printPreviewDialog1. = pd;
+            //printPreviewDialog1.ShowDialog();
+
+            //pd.Print(); 
+        }
+
+        void pd_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            System.Drawing.Image img = System.Drawing.Image.FromFile("D:\\Foto.jpg");
+            System.Drawing.Point loc = new System.Drawing.Point(100, 100);
+            e.Graphics.DrawImage(img, loc);
         }
 
         #endregion
@@ -785,9 +920,9 @@ namespace Vision.ViewModels
             Magic.OpenAndSelect(CurrentPicture.Path);
         }
         #endregion
-
+         
         #region Mover
-        private void MoverPrimera() 
+        public void MoverPrimera()
         {
             CurrentPicture = Pictures.Primera;
         }
@@ -802,8 +937,8 @@ namespace Vision.ViewModels
             CurrentPicture = Pictures.Siguiente(CurrentPicture);
         }
 
-        private void MoverUltima()
-        {            
+        public void MoverUltima()
+        {
             CurrentPicture = Pictures.Ultima;
         }
 
@@ -820,8 +955,14 @@ namespace Vision.ViewModels
         private DispatcherTimer _slideTimer;
         public DispatcherTimer SlideTimer
         {
-            get { return _slideTimer; }
-            set { _slideTimer = value; }
+            get
+            {
+                return _slideTimer;
+            }
+            set
+            {
+                _slideTimer = value;
+            }
         }
 
         private void IniciarPresentacion()
@@ -862,7 +1003,7 @@ namespace Vision.ViewModels
         public void ZoomIn()
         {
             Point p = new Point(Imagen.ActualWidth / 2, Imagen.ActualHeight / 2);
-            Border.ApplyZoom(1, p);            
+            Border.ApplyZoom(1, p);
         }
         #endregion
 
@@ -879,29 +1020,29 @@ namespace Vision.ViewModels
         //Posible solución para giros en ángulos erróneos:
         //https://stackoverflow.com/questions/29585378/wpf-rotating-image-with-arbitrary-angle
 
-        private void RotateLeft()
+        public void RotateLeft()
         {
             if (Transform.Angle % 90 == 0)
             {
                 Storyboard storyboard = new Storyboard();
                 storyboard.Completed += rotation_Completed;
                 storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(150));
-                DoubleAnimation rotateAnimation = new DoubleAnimation(Transform.Angle, Transform.Angle - 90, storyboard.Duration); 
+                DoubleAnimation rotateAnimation = new DoubleAnimation(Transform.Angle, Transform.Angle - 90, storyboard.Duration);
                 Storyboard.SetTarget(rotateAnimation, Border);
                 Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
                 storyboard.Children.Add(rotateAnimation);
                 storyboard.Begin();
             }
         }
-                
-        private void RotateRight()
+
+        public void RotateRight()
         {
             if (Transform.Angle % 90 == 0)
             {
                 Storyboard storyboard = new Storyboard();
                 storyboard.Completed += rotation_Completed;
                 storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(150));
-                DoubleAnimation rotateAnimation = new DoubleAnimation(Transform.Angle, Transform.Angle + 90, storyboard.Duration); 
+                DoubleAnimation rotateAnimation = new DoubleAnimation(Transform.Angle, Transform.Angle + 90, storyboard.Duration);
                 Storyboard.SetTarget(rotateAnimation, Border);
                 Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
                 storyboard.Children.Add(rotateAnimation);
@@ -948,7 +1089,7 @@ namespace Vision.ViewModels
 
         void rotation_Completed(object sender, EventArgs e)
         {
-            
+
         }
 
         private void RestaurarRotacion()
@@ -963,7 +1104,7 @@ namespace Vision.ViewModels
 
             storyboard.Children.Add(rotateAnimation);
             storyboard.Begin();
-        } 
+        }
         #endregion
 
         #region ApplyBlur
@@ -983,7 +1124,7 @@ namespace Vision.ViewModels
 
         private void CancelBlur()
         {
-            Border.Effect = null;            
+            Border.Effect = null;
         }
 
         #endregion
@@ -1037,70 +1178,226 @@ namespace Vision.ViewModels
         #region NormalizeExifRotation
         private void NormalizeExifRotation(Func<ushort> func)
         {
-            if (LoadSuccessfully)
+            try
             {
-                UInt16 valor = func.Invoke();
-                if (valor > 0)
+                if (LoadSuccessfully)
                 {
-                    Storyboard storyboard = new Storyboard();
-                    //storyboard.Completed += rotation_Completed;
-                    storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(0));
-                    DoubleAnimation rotateAnimation = new DoubleAnimation(Transform.Angle, Transform.Angle, storyboard.Duration);
-                    switch ((int)valor)
+                    UInt16 valor = func.Invoke();
+                    if (valor > 0)
                     {
-                        case 1:
-                            rotateAnimation = new DoubleAnimation(0, storyboard.Duration);
-                            break;
-                        //case 2: //
-                        //    rotateAnimation = new DoubleAnimation(90, storyboard.Duration);
-                        //    break;
-                        case 3:
-                            rotateAnimation = new DoubleAnimation(180, storyboard.Duration);
-                            break;
-                        //case 4: //
-                        //    rotateAnimation = new DoubleAnimation(270, storyboard.Duration);
-                        //    break;
-                        //case 5: //
-                        //    rotateAnimation = new DoubleAnimation(0, storyboard.Duration);
-                        //    break;
-                        case 6:
-                            rotateAnimation = new DoubleAnimation(90, storyboard.Duration);
-                            break;
-                        //case 7: //
-                        //    rotateAnimation = new DoubleAnimation(180, storyboard.Duration);
-                        //    break;
-                        case 8:
-                            rotateAnimation = new DoubleAnimation(270, storyboard.Duration);
-                            break;
-                    }
+                        Storyboard storyboard = new Storyboard();
+                        storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(0));
+                        DoubleAnimation rotateAnimation = new DoubleAnimation(Transform.Angle, Transform.Angle, storyboard.Duration);
+                        switch ((int)valor)
+                        {
+                            case 1:
+                                rotateAnimation = new DoubleAnimation(0, storyboard.Duration);
+                                break;
+                            case 3:
+                                rotateAnimation = new DoubleAnimation(180, storyboard.Duration);
+                                break;
+                            case 6:
+                                rotateAnimation = new DoubleAnimation(90, storyboard.Duration);
+                                break;
+                            case 8:
+                                rotateAnimation = new DoubleAnimation(270, storyboard.Duration);
+                                break;
+                        }
 
-                    Storyboard.SetTarget(rotateAnimation, Border);
-                    Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
-                    storyboard.Children.Add(rotateAnimation);
-                    storyboard.Begin();
+                        Storyboard.SetTarget(rotateAnimation, Border);
+                        Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
+                        storyboard.Children.Add(rotateAnimation);
+                        storyboard.Begin();
+                    }
+                }
+                else
+                {
+                    LoadSuccessfully = true;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                LoadSuccessfully = true;
+                Console.WriteLine("Error por asignación nula en CurrentPicture: " + ex.ToString());
             }
-
-            RaisePropertyChanged("CurrentPicture");
+            finally
+            {
+                RaisePropertyChanged("CurrentPicture");
+            }
         }
         #endregion
-        
+
         #region ReadMetadata
         private void ReadMetadata()
         {
-            ExifTags.Clear();
-            ExifTags.Add("=== METADATA ===");
-            IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(CurrentPicture.Path);
-            foreach (var directory in directories)
-                foreach (var tag in directory.Tags)
-                ExifTags.Add(directory.Name + " - " + tag.Name + " = " + tag.Description);
-
-            RaisePropertyChanged("ExifTags");
+            try
+            {
+                ExifTags.Clear();
+                if (CurrentPicture != null)
+                {
+                    ExifTags.Add("=== METADATA ===");
+                    IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(CurrentPicture.Path);
+                    foreach (var directory in directories)
+                        foreach (var tag in directory.Tags)
+                            ExifTags.Add(directory.Name + " - " + tag.Name + " = " + tag.Description);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error por asginación nula en CurrentPicture: " + ex.ToString());
+            }
+            finally
+            {
+                RaisePropertyChanged("ExifTags");
+            }
         }
         #endregion
+
+
+        /* ===================== CÓDIGO EN CONSTRUCCIÓN ===================== */
+
+
+        #region Eliminar (DEBUG PENDIENTE)
+        //private void DeleteFile()
+        //{
+        //    try
+        //    {
+        //        //si es el unico
+        //        //---limpiar la lista y que vuelva el logo
+        //        //si no
+        //        //---si hay una imagen antes
+        //        //------moverse a ella
+        //        //---si hay una imagen despues
+        //        //------moverse a ella
+
+        //        if (Pictures.Count > 1)
+        //        {
+        //            string ruta = CurrentPicture.Path;
+        //            if (Pictures.PrevPicture(CurrentPicture))
+        //            {
+        //                CurrentPicture = Pictures.Anterior(CurrentPicture);
+        //                Pictures.Remove(Pictures.Siguiente(CurrentPicture));
+        //            }
+        //            else
+        //            {
+        //                CurrentPicture = Pictures.Siguiente(CurrentPicture);
+        //                Pictures.Remove(Pictures.Anterior(CurrentPicture));
+        //            }
+
+        //            Pictures.RemapIndexes();
+        //            BorrarArchivo(ruta);
+        //        }
+        //        else
+        //        {
+        //            string ruta = string.Empty + CurrentPicture.Path;
+        //            Pictures.Remove(CurrentPicture);
+        //            CurrentPicture = null; //esto da error pero lo manejo en el SET 
+        //            TryDelete(ruta);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("=>>>: " + ex.ToString());
+        //        MessageBox.Show("=>>>: " + ex.Message);
+        //    }
+        //}
+
+
+        //private void TryDelete(string path)
+        //{
+        //    CtrlLeftVision = false;
+        //    CtrlRightVision = false;
+        //    //Pictures.FirstImage = null;
+        //    //Pictures.Clear();
+        //    //CurrentPicture = null;
+        //    ResetAllMods();
+
+        //    _ = Task.Run(async () =>
+        //    {
+        //        await Task.Run(() => DummyMethod());
+        //        GC.Collect();
+        //        GC.WaitForPendingFinalizers();
+
+        //        try
+        //        {
+        //            if (File.Exists(path))
+        //            {
+        //                File.Delete(path);
+        //            }
+        //        }
+        //        catch (IOException ex)
+        //        {
+        //            Console.WriteLine("=========> Error IO el archivo: " + ex.ToString());
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine("=========> Error borrando el archivo: " + ex.ToString());
+        //        }
+        //    });
+
+        //} 
+
+
+        //private void DummyMethod()
+        //{
+        //    Application.Current.Dispatcher.Invoke(new Action(() =>
+        //    {
+        //        Pictures.RemapIndexes();
+        //    }));
+        //}
+
+        //private void BorrarArchivo(string path)
+        //{
+        //    try
+        //    {
+        //        Task tsk = Task.Run(async () =>
+        //        {
+        //            await Task.Run(() => DummyMethod());
+        //            GC.Collect();
+        //            GC.WaitForPendingFinalizers();
+        //            try
+        //            {
+        //                File.Delete(path);
+        //                Console.WriteLine("=========> Borrando 5/5 Finishing");
+        //            }
+        //            catch (System.IO.IOException ex)
+        //            {
+        //                Console.WriteLine("=========> Error IO el archivo: " + ex.ToString());
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                Console.WriteLine("=========> Error borrando el archivo: " + ex.ToString());
+        //            }
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("=========> Error borrando el archivo: " + ex.ToString());
+        //        MessageBox.Show("Imposible borrar el archivo, intente más tarde", "Información", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
+
+
+        //private void BorrarArchivoUnico(string path)
+        //{
+        //    try
+        //    {
+        //        Task tsk = Task.Run(async () =>
+        //        {
+        //            await Task.Run(() => LimpiarColecciones());
+        //            GC.Collect();
+        //            GC.WaitForPendingFinalizers();
+        //            File.Delete(path);
+        //        });
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Error borrando el archivo: " + ex.ToString());
+        //        MessageBox.Show("Imposible borrar el archivo, intente más tarde", "Información", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
+
+        #endregion
+
     }
 }
