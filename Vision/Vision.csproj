@@ -117,6 +117,7 @@
     <Compile Include="Core\SettingsManager.cs" />
     <Compile Include="Core\WindowsFileNameComparer.cs" />
     <Compile Include="Models\Programa.cs" />
+    <Compile Include="Models\Rotations.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Models\Picture.cs" />
     <Compile Include="Views\SettingsDialog.xaml.cs">

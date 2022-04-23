@@ -688,6 +688,7 @@ namespace Vision.ViewModels
             {
                 await Task.Run(() => LimpiarColecciones());
                 await Task.Run(() => CargarPrimeraImagen());
+                await Task.Run(() => LoadDotVision(Pictures.FirstImage));
                 if (SettingsManager.Load("OnlySelected") != 1)
                 {
                     await Task.Run(() => CargarImagenesCompatibles());
@@ -920,32 +921,37 @@ namespace Vision.ViewModels
             Magic.OpenAndSelect(CurrentPicture.Path);
         }
         #endregion
-         
+
         #region Mover
         public void MoverPrimera()
         {
             CurrentPicture = Pictures.Primera;
+            RotateNow(CurrentPicture);
         }
 
         public void MoverAnterior()
         {
             CurrentPicture = Pictures.Anterior(CurrentPicture);
+            RotateNow(CurrentPicture);
         }
 
         public void MoverSiguiente()
         {
             CurrentPicture = Pictures.Siguiente(CurrentPicture);
+            RotateNow(CurrentPicture);
+
         }
 
         public void MoverUltima()
         {
             CurrentPicture = Pictures.Ultima;
+            RotateNow(CurrentPicture);
         }
 
         #endregion
 
         #region Presentación
-        private void Presentacion()
+        public void Presentacion()
         {
             CancelBlur();
             RestaurarRotacion();
@@ -1049,6 +1055,63 @@ namespace Vision.ViewModels
                 storyboard.Begin();
             }
         }
+
+        private void UpdateDotVision()
+        {
+
+        }
+
+        public void RotateNow(Picture picture)
+        {
+            double angle = 0;
+            angle = Rotations.getAngle(picture);
+
+
+            if (Transform.Angle % 90 == 0)
+            {
+                Storyboard storyboard = new Storyboard();
+                storyboard.Completed += rotation_Completed;
+                storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(0));
+                //double angulo = angle > 0 ? Transform.Angle + angle : Transform.Angle - angle;
+                DoubleAnimation rotateAnimation = new DoubleAnimation(Transform.Angle, Transform.Angle + angle, storyboard.Duration);
+                Storyboard.SetTarget(rotateAnimation, Border);
+                Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
+                storyboard.Children.Add(rotateAnimation);
+                storyboard.Begin();
+            }
+        }
+
+        private void LoadDotVision(Picture picture)
+        {
+            string fileName = picture.Directorio + @"\.vision";
+            Rotations.Clear();
+            const Int32 BufferSize = 128;
+            using (var fileStream = File.OpenRead(fileName))
+            using (var streamReader = new StreamReader(fileStream, System.Text.Encoding.UTF8, true, BufferSize))
+            {
+                string line;
+                while ((line = streamReader.ReadLine()) != null)
+                {
+                    string[] valores = line.Split('|');
+                    double angulo = 0;
+                    double.TryParse(valores[1], out angulo);
+                    Rotations.Add(new Rotation(valores[0], angulo));
+                }
+            }
+        }
+
+        private RotationList Rotations = new RotationList();
+
+
+
+
+
+
+
+
+
+
+
 
         private void RotateRightORIGINAL()
         {

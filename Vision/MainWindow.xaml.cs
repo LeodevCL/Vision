@@ -39,7 +39,6 @@ namespace Vision
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            //Console.WriteLine("Key: " + e.Key + " " + e.Key.ToString());
             switch (e.Key)
             {
                 case Key.Escape:
@@ -54,6 +53,9 @@ namespace Vision
                     break;
                 case Key.O:
                     ViewModel.OpenFile();
+                    break;
+                case Key.F:
+                    ViewModel.Presentacion();
                     break;
                 case Key.LeftCtrl:
                     ViewModel.CtrlLeftVision = !ViewModel.CtrlLeftVision;
